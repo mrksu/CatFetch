@@ -8,7 +8,7 @@ from formats_dialog import FormatsDialog
 
 class Downloadable(Gtk.ListBoxRow):
 
-    def __init__(self, main_window, this_item_dict, options_button):
+    def __init__(self, main_window, this_item_dict):
         super(Gtk.ListBoxRow, self).__init__()
 
         self.main_window = main_window
@@ -39,28 +39,6 @@ class Downloadable(Gtk.ListBoxRow):
         self.info_widget.pack_start(self.video_duration_label, 0, 0, 0)
         self.hbox.pack_start(self.info_widget, 1, 1, 0)
 
-        # # vertical box for a/v/both mode and format selection
-        # self.av_selection_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
-        # self.hbox.pack_end(self.av_selection_box, 0, 0, 5)
-
-        ## # the 'av' button
-        ## self.mode_button_av = Gtk.RadioButton.new_from_widget(None)
-        ## self.mode_button_av.props.label = "Video and audio"
-        ## self.mode_button_av.connect("toggled", self.mode_toggled_av, "1")
-        ## self.av_selection_box.add(self.mode_button_av)
-
-        ## # the 'v' button
-        ## self.mode_button_v = Gtk.RadioButton.new_from_widget(self.mode_button_av)
-        ## self.mode_button_v.props.label = "Video only"
-        ## self.mode_button_v.connect("toggled", self.mode_toggled_v, "2")
-        ## self.av_selection_box.add(self.mode_button_v)
-
-        ## # the 'a' button
-        ## self.mode_button_a = Gtk.RadioButton.new_from_widget(self.mode_button_av)
-        ## self.mode_button_a.props.label = "Audio only"
-        ## self.mode_button_a.connect("toggled", self.mode_toggled_a, "3")
-        ## self.av_selection_box.add(self.mode_button_a)
-
         # and now a ComboBox for format selection
         # this one contains downloads with video and audio
         self.a_v_format_store = self.create_format_store("av")
@@ -76,7 +54,7 @@ class Downloadable(Gtk.ListBoxRow):
         # requires it to exist
         self.format_selection = self.create_format_selection(initial=True)
 
-        self.hbox.pack_end(self.format_selection, 0, 0, 0)
+        # self.hbox.pack_end(self.format_selection, 0, 0, 0)
 
         # # a failed popover test
         # self.app = Gtk.Application.new('org.mrksu.g_vid_dow', 0)
@@ -124,7 +102,7 @@ class Downloadable(Gtk.ListBoxRow):
         # this specifies which columns is used by get_active_id()
         self.mode_selection.props.id_column = 0
         # this means the first item (Video and audio) will be pre-selected
-        # self.mode_selection.props.active = 0
+        self.mode_selection.props.active = 0
         # self.av_selection_box.pack_start(self.mode_selection, 0, 0, 0)
 
         # self.main_window.options_button = Gtk.Button("Formats")
@@ -137,6 +115,24 @@ class Downloadable(Gtk.ListBoxRow):
         self.status_label_text = self.this_item_dict["status"]
         self.status_label = Gtk.Label(self.status_label_text)
         self.status_box.add(self.status_label)
+
+        # a Gtk.Box Popover
+        pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        pop_box.pack_start(self.mode_selection, 0, 0, 0)
+        pop_box.pack_start(self.format_selection, 0, 0, 0)
+        
+        pop_button = Gtk.MenuButton()
+        pop_label = Gtk.Label("Format")
+        pop_button.add(pop_label)
+
+        popover = Gtk.Popover.new(pop_button)
+        popover.add(pop_box)
+        pop_button.set_popover(popover)
+        self.hbox.pack_end(pop_button, 0, 0, 0)
+
+        # this is needed or else the popover appears empty
+        pop_box.show_all()
+
 
     def get_current_mode(self):
         """returns one of 'av', 'v', 'a'"""

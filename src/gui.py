@@ -112,11 +112,7 @@ class MainWindow(Gtk.Window):
             "status": "waiting"
         })
 
-        options_button = Gtk.Button("Formats")
-
-        listbox_row = Downloadable(self, self.items_list[-1], options_button)
-
-        options_button.connect("clicked", self.open_formats_dialog, listbox_row)
+        listbox_row = Downloadable(self, self.items_list[-1])
 
         self.items_list[-1]["listbox_row"] = listbox_row
 
@@ -134,15 +130,6 @@ class MainWindow(Gtk.Window):
         ## self.url_entry.props.sensitive = True
 
         self.download_button.props.sensitive = True
-
-    def mode_toggled_av(self, button, name):
-        self.media_mode = "both"
-
-    def mode_toggled_v(self, button, name):
-        self.media_mode = "video"
-
-    def mode_toggled_a(self, button, name):
-        self.media_mode = "audio"
 
     def downloadables_refresh(self, items_list):
         self.outer_box.remove(self.downloadables_listbox)
