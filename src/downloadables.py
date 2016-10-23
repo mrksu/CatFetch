@@ -15,7 +15,6 @@ class Downloadable(Gtk.ListBoxRow):
         self.this_item_dict = this_item_dict
         self.url = this_item_dict["url"]
         self.info_dict = this_item_dict["ytdl_info_dict"]
-        self.options_button = options_button
 
         # a horizontal box containing all else in this row
         self.hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
