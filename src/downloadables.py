@@ -17,10 +17,12 @@ class Downloadable(Gtk.ListBoxRow):
         self.info_dict = this_item_dict["ytdl_info_dict"]
 
         # a horizontal box containing all else in this row
+        # TODO: could use borders separating ListBox rows
         self.hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
         self.add(self.hbox)
 
         # a box for a cover picture; placeholder for now
+        # TODO: cover picture
         self.cover_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         self.hbox.pack_start(self.cover_box, 0, 0, 5)
         self.cover_placeholder = Gtk.Label("cover")
@@ -29,6 +31,7 @@ class Downloadable(Gtk.ListBoxRow):
         self.cover_box.add(self.cover_placeholder)
 
         # middle part of the row; contains video info
+        # TODO: nicer info
         self.video_title_label = Gtk.Label(self.info_dict["title"])
         # ellipsize characters at the end
         self.video_title_label.props.ellipsize = 3
@@ -109,6 +112,7 @@ class Downloadable(Gtk.ListBoxRow):
         # self.hbox.pack_end(self.options_button, 0, 0, 0)
 
         # a box containing the item's status info
+        # TODO: turn into a dynamic thing containing e.g. download button
         self.status_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.hbox.pack_end(self.status_box, 0, 0, 0)
         self.status_label_text = self.this_item_dict["status"]
@@ -234,6 +238,7 @@ class Downloadable(Gtk.ListBoxRow):
 
         return format_store
 
+    # TODO: get rid of this
     def open_formats_dialog(self, widget):
         dialog = FormatsDialog(self.main_window, self)
         response = self.formats_dialog.run()
@@ -241,6 +246,7 @@ class Downloadable(Gtk.ListBoxRow):
 
         dialog.hide()
 
+    # TODO: ...and this
     def show_opts_box(self, widget):
         opts_box = Gtk.Box()
         opts_label = Gtk.Label("Opts here.")

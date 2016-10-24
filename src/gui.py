@@ -37,6 +37,7 @@ class MainWindow(Gtk.Window):
         self.set_titlebar(self.headerbar)
 
         ## we'll move the download button to the right and make it an arrow later
+        # TODO: add an icon
         self.download_button = Gtk.Button("Download")
         self.download_button.connect("clicked", self.launch_download)
         self.download_button.props.sensitive = False
@@ -94,6 +95,7 @@ class MainWindow(Gtk.Window):
             ytdl_info_dict = extract_vid_info(url_entered)
             # pprint(self.ytdl_info_dict)
         except youtube_dl.utils.DownloadError:
+            # TODO: show a warning window
             print("Sorry, url not valid")
             # self.url_entry.props.sensitive = True
             # self.url_entry.grab_focus()
@@ -142,6 +144,7 @@ class MainWindow(Gtk.Window):
         self.outer_box.add(self.downloadables_listbox)
         self.downloadables_listbox.show_all()
 
+    # TODO: get rid of this
     def open_formats_dialog(self, widget, listbox_row):
         dialog = FormatsDialog(self, listbox_row)
         response = dialog.run()
