@@ -4,8 +4,6 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio
 
-from formats_dialog import FormatsDialog
-
 class Downloadable(Gtk.ListBoxRow):
 
     def __init__(self, main_window, this_item_dict):

@@ -9,7 +9,6 @@ from gi.repository import Gtk, Gdk
 import youtube_dl
 from ytdl_wrapper import *
 from downloadables import Downloadable
-from formats_dialog import FormatsDialog
 
 class MainWindow(Gtk.Window):
     
@@ -36,9 +35,12 @@ class MainWindow(Gtk.Window):
         self.headerbar.props.title = "Video Downloader"
         self.set_titlebar(self.headerbar)
 
-        ## we'll move the download button to the right and make it an arrow later
-        # TODO: add an icon
-        self.download_button = Gtk.Button("Download")
+
+        # TODO: Add a button for removing all downloaded items from list
+
+
+        # possible icons: document-save, go-down, emblem-downloads
+        self.download_button = Gtk.Button.new_from_icon_name("document-save", Gtk.IconSize.BUTTON)
         self.download_button.connect("clicked", self.launch_download)
         self.download_button.props.sensitive = False
         self.headerbar.pack_end(self.download_button)
