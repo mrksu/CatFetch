@@ -95,11 +95,9 @@ class MainWindow(Gtk.Window):
             ytdl_info_dict = extract_vid_info(url_entered)
             # pprint(self.ytdl_info_dict)
         except youtube_dl.utils.DownloadError:
-            # TODO: show a warning window
-            print("Sorry, url not valid")
-            # self.url_entry.props.sensitive = True
-            # self.url_entry.grab_focus()
-            pass
+            # Show an error dialog
+            self.invalid_url_dialog(url_entered)
+            return
 
         available_a_v_s = filter(get_a_v_list, ytdl_info_dict["formats"])
         available_video_s = filter(get_video_list, ytdl_info_dict["formats"])
@@ -153,6 +151,15 @@ class MainWindow(Gtk.Window):
 
         dialog.connect("response", lambda dialog, response: dialog.destroy())
         #dialog.connect("response", dialog.destroy)
+
+    def invalid_url_dialog(self, url):
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
+                 Gtk.ButtonsType.CANCEL, "Invalid address")
+        dialog.format_secondary_text(
+                 "The address you entered is not downloadable:\n\n"
+                 "{}".format(url))
+        dialog.run()
+        dialog.destroy()
 
 
 
