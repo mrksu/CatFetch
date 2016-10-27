@@ -238,19 +238,3 @@ class Downloadable(Gtk.ListBoxRow):
 
         return format_store
 
-    # TODO: get rid of this
-    def open_formats_dialog(self, widget):
-        dialog = FormatsDialog(self.main_window, self)
-        response = self.formats_dialog.run()
-        print(response)
-
-        dialog.hide()
-
-    # TODO: ...and this
-    def show_opts_box(self, widget):
-        opts_box = Gtk.Box()
-        opts_label = Gtk.Label("Opts here.")
-        opts_box.add(opts_label)
-        self.main_window.outer_box.pack_end(opts_box, 0, 0, 0)
-        opts_box.show_all()
-

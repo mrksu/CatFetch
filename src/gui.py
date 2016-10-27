@@ -142,16 +142,6 @@ class MainWindow(Gtk.Window):
         self.outer_box.add(self.downloadables_listbox)
         self.downloadables_listbox.show_all()
 
-    # TODO: get rid of this
-    def open_formats_dialog(self, widget, listbox_row):
-        dialog = FormatsDialog(self, listbox_row)
-        response = dialog.run()
-        print(response)
-        dialog.show()
-
-        dialog.connect("response", lambda dialog, response: dialog.destroy())
-        #dialog.connect("response", dialog.destroy)
-
     def invalid_url_dialog(self, url):
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
                  Gtk.ButtonsType.CANCEL, "Invalid address")
