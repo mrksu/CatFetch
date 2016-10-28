@@ -124,8 +124,10 @@ class Downloadable(Gtk.ListBoxRow):
         
         # ...from a button
         pop_button = Gtk.MenuButton()
-        pop_label = Gtk.Label("Format")
-        pop_button.add(pop_label)
+        # Possible icons: document-properties, applications-system
+        pop_icon = Gtk.Image.new_from_icon_name(
+            "applications-system", Gtk.IconSize.BUTTON)
+        pop_button.add(pop_icon)
         pop_button.props.tooltip_text = \
             "Select video and audio format to download"
 

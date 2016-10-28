@@ -41,7 +41,8 @@ class MainWindow(Gtk.Window):
 
         # The Download button
         # possible icons: document-save, go-down, emblem-downloads
-        self.download_button = Gtk.Button.new_from_icon_name("document-save", Gtk.IconSize.BUTTON)
+        self.download_button = Gtk.Button.new_from_icon_name(
+            "document-save", Gtk.IconSize.BUTTON)
         self.download_button.connect("clicked", self.launch_download)
         self.download_button.props.sensitive = False
         self.download_button.props.tooltip_text = \
@@ -77,6 +78,7 @@ class MainWindow(Gtk.Window):
         ## self.url_line_box.pack_start(self.url_evaluate_button, 0, 0, 0)
 
         # a ListBox containing added videos to be downloaded
+        # TODO: make rows non-selectable
         self.downloadables_listbox = Gtk.ListBox()
         self.outer_box.add(self.downloadables_listbox)
 
