@@ -122,9 +122,12 @@ class Downloadable(Gtk.ListBoxRow):
         pop_box.pack_start(self.mode_selection, 0, 0, 0)
         pop_box.pack_start(self.format_selection, 0, 0, 0)
         
+        # ...from a button
         pop_button = Gtk.MenuButton()
         pop_label = Gtk.Label("Format")
         pop_button.add(pop_label)
+        pop_button.props.tooltip_text = \
+            "Select video and audio format to download"
 
         popover = Gtk.Popover.new(pop_button)
         popover.add(pop_box)

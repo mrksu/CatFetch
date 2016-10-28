@@ -39,17 +39,24 @@ class MainWindow(Gtk.Window):
         # TODO: Add a button for removing all downloaded items from list
 
 
+        # The Download button
         # possible icons: document-save, go-down, emblem-downloads
         self.download_button = Gtk.Button.new_from_icon_name("document-save", Gtk.IconSize.BUTTON)
         self.download_button.connect("clicked", self.launch_download)
         self.download_button.props.sensitive = False
+        self.download_button.props.tooltip_text = \
+            "Download all waiting videos"
         self.headerbar.pack_end(self.download_button)
 
+        # The Paste button
         self.paste_button = Gtk.Button("Paste")
         self.paste_button.connect("clicked", self.url_pasted)
+        self.paste_button.props.tooltip_text = \
+            "Paste video address from the clipboard"
         self.headerbar.pack_start(self.paste_button)
 
-        self.outer_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+        self.outer_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, 
+            spacing=10)
         self.add(self.outer_box)
 
         ### replaced by the 'Paste' button
