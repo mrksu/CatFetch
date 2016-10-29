@@ -14,9 +14,6 @@ class Downloadable(Gtk.ListBoxRow):
         self.url = this_item_dict["url"]
         self.info_dict = this_item_dict["ytdl_info_dict"]
 
-        # Make rows non-selectable
-        self.props.selectable = False
-
         # a horizontal box containing all else in this row
         # TODO: could use borders separating ListBox rows
         self.hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)

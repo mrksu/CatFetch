@@ -85,6 +85,9 @@ class MainWindow(Gtk.Window):
         # a ListBox containing added videos to be downloaded
         self.downloadables_listbox = Gtk.ListBox()
         self.downloadables_listbox.set_placeholder(listbox_placeholder)
+        # Make rows non-selectable
+        self.downloadables_listbox.props.selection_mode = \
+            Gtk.Selection.NONE
         self.outer_box.add(self.downloadables_listbox)
 
 
