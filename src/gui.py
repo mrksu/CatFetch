@@ -78,7 +78,6 @@ class MainWindow(Gtk.Window):
         ## self.url_line_box.pack_start(self.url_evaluate_button, 0, 0, 0)
 
         # a ListBox containing added videos to be downloaded
-        # TODO: make rows non-selectable
         self.downloadables_listbox = Gtk.ListBox()
         self.outer_box.add(self.downloadables_listbox)
 

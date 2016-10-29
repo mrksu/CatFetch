@@ -20,6 +20,7 @@ class Downloadable(Gtk.ListBoxRow):
         # a horizontal box containing all else in this row
         # TODO: could use borders separating ListBox rows
         self.hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
+        self.hbox.props.margin = 5
         self.add(self.hbox)
 
         # a box for a cover picture; placeholder for now
