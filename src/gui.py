@@ -87,7 +87,7 @@ class MainWindow(Gtk.Window):
         self.downloadables_listbox.set_placeholder(listbox_placeholder)
         # Make rows non-selectable
         self.downloadables_listbox.props.selection_mode = \
-            Gtk.Selection.NONE
+            Gtk.SelectionMode.NONE
         self.outer_box.add(self.downloadables_listbox)
 
 
