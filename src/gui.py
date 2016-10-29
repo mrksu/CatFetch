@@ -77,8 +77,14 @@ class MainWindow(Gtk.Window):
         ## self.url_evaluate_button.connect("clicked", self.url_evaluate)
         ## self.url_line_box.pack_start(self.url_evaluate_button, 0, 0, 0)
 
+        # a placeholder if there aren't any videos to show
+        # TODO: find out why this doesn't work or find a different way
+        listbox_placeholder = Gtk.Label(
+            "Paste videos from the clipboard using the 'Paste' button")
+
         # a ListBox containing added videos to be downloaded
         self.downloadables_listbox = Gtk.ListBox()
+        self.downloadables_listbox.set_placeholder(listbox_placeholder)
         self.outer_box.add(self.downloadables_listbox)
 
 
