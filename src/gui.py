@@ -93,8 +93,10 @@ class MainWindow(Gtk.Window):
 
     def launch_download(self, widget):
         for item in self.items_list:
+            # TODO: download to ~/Downloads by default
             download_vid(item["url"], item["download_format_id"])
 
+    # TODO: remove 'self'
     def url_pasted(self, widget):
         self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         text = self.clipboard.wait_for_text()
