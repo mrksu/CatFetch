@@ -126,7 +126,7 @@ class Downloadable(Gtk.ListBoxRow):
         self.download_item_button.connect("clicked", self.download_item)
         self.download_item_button.props.tooltip_text = \
             "Download this video"
-        self.status_box.add(self.download_item_button)
+        self.status_box.pack_start(self.download_item_button, 1, 1, 0)
 
         # a Gtk.Box Popover
         pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
