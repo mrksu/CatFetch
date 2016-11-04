@@ -33,10 +33,22 @@ class Downloadable(Gtk.ListBoxRow):
 
         # middle part of the row; contains video info
         # TODO: nicer info
-        self.video_title_label = Gtk.Label(self.info_dict["title"])
+        self.video_title_label = Gtk.Label()
+        # Video title as a label
+        # "size='large'" could also be added
+        self.video_title_label.set_markup(
+            "<span weight='bold'>{}</span>".format(self.info_dict["title"])
+        )
         # ellipsize characters at the end
         self.video_title_label.props.ellipsize = 3
-        self.video_duration_label = Gtk.Label(self.info_dict["duration"])
+
+        # Convert time from seconds to h:m:s
+        dur_h, dur_m, dur_s = h_m_s_time(self.info_dict["duration"])
+
+        self.video_duration_label = Gtk.Label(
+            "{}:{}:{}".format(dur_h, dur_m, dur_s)
+        )
+
         self.info_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.info_widget.pack_start(self.video_title_label, 1, 0, 0)
         self.info_widget.pack_start(self.video_duration_label, 0, 0, 0)
@@ -129,7 +141,7 @@ class Downloadable(Gtk.ListBoxRow):
         self.status_box.pack_start(self.download_item_button, 1, 1, 0)
 
         # # Button combining download and format
-        ### Need to figure out how to create a menu
+        ### Need to figure out how to create a menu for this to work; TODO
         # download_icon = Gtk.Image.new_from_icon_name("document-save", Gtk.IconSize.BUTTON)
         # self.download_and_format_button = Gtk.MenuToolButton(download_icon, None)
         # self.download_and_format_button.set_menu(Gtk.Popover())
@@ -261,4 +273,14 @@ class Downloadable(Gtk.ListBoxRow):
 
     def download_item(self, widget):
         download_vid(self.url, self.this_item_dict["download_format_id"])
+
+
+
+def h_m_s_time(seconds):
+    """ Convert time from seconds to h:m:s """
+    duration_total_s = seconds
+    duration_m, duration_s = divmod(duration_total_s, 60)
+    duration_h, duration_m = divmod(duration_m, 60)
+    
+    return (duration_h, duration_m, duration_s)
 
