@@ -128,6 +128,13 @@ class Downloadable(Gtk.ListBoxRow):
             "Download this video"
         self.status_box.pack_start(self.download_item_button, 1, 1, 0)
 
+        # # Button combining download and format
+        ### Need to figure out how to create a menu
+        # download_icon = Gtk.Image.new_from_icon_name("document-save", Gtk.IconSize.BUTTON)
+        # self.download_and_format_button = Gtk.MenuToolButton(download_icon, None)
+        # self.download_and_format_button.set_menu(Gtk.Popover())
+        # self.hbox.pack_end(self.download_and_format_button, 0, 0, 0)
+
         # a Gtk.Box Popover
         pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         pop_box.pack_start(self.mode_selection, 0, 0, 0)
