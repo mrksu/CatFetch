@@ -4,6 +4,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio
 
+from ytdl_wrapper import *
+
 class Downloadable(Gtk.ListBoxRow):
 
     def __init__(self, main_window, this_item_dict):
@@ -114,9 +116,17 @@ class Downloadable(Gtk.ListBoxRow):
         # TODO: turn into a dynamic thing containing e.g. download button
         self.status_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.hbox.pack_end(self.status_box, 0, 0, 0)
-        self.status_label_text = self.this_item_dict["status"]
-        self.status_label = Gtk.Label(self.status_label_text)
-        self.status_box.add(self.status_label)
+        # self.status_label_text = self.this_item_dict["status"]
+        # self.status_label = Gtk.Label(self.status_label_text)
+        # self.status_box.add(self.status_label)
+
+        # A Download button
+        self.download_item_button = Gtk.Button.new_from_icon_name(
+            "document-save", Gtk.IconSize.BUTTON)
+        self.download_item_button.connect("clicked", self.download_item)
+        self.download_item_button.props.tooltip_text = \
+            "Download this video"
+        self.status_box.add(self.download_item_button)
 
         # a Gtk.Box Popover
         pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -148,16 +158,16 @@ class Downloadable(Gtk.ListBoxRow):
 
     def mode_has_been_selected(self, combo):
 
-        mode = self.get_current_mode()
+        selected_mode = self.get_current_mode()
 
-        if mode == "av":
+        if selected_mode == "av":
             store = self.a_v_format_store
-        elif mode == "v":
+        elif selected_mode == "v":
             store = self.video_format_store
-        elif mode == "a":
+        elif selected_mode == "a":
             store = self.audio_format_store
         else:
-            exit("Error: Unknown mode {}".format(mode))
+            exit("Error: Unknown mode {}".format(selected_mode))
 
         self.format_selection.clear()
         self.format_selection.set_model(store)
@@ -241,4 +251,7 @@ class Downloadable(Gtk.ListBoxRow):
             return None
 
         return format_store
+
+    def download_item(self, widget):
+        download_vid(self.url, self.this_item_dict["download_format_id"])
 
