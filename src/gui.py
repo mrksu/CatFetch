@@ -64,23 +64,6 @@ class MainWindow(Gtk.Window):
             spacing=10)
         self.add(self.outer_box)
 
-        ### replaced by the 'Paste' button
-        ## self.url_line_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=5)
-        ## self.outer_box.add(self.url_line_box)
-
-        ## self.url_label = Gtk.Label("Video address:")
-        ## self.url_line_box.pack_start(self.url_label, 0, 0, 0)
-
-        ## self.url_entry = Gtk.Entry()
-        ## self.url_entry.grab_focus()
-        ## self.url_line_box.pack_start(self.url_entry, 1, 1, 0)
-
-        ## self.url_evaluate_button = Gtk.Button()
-        ## self.url_evaluate_label = Gtk.Label("Add")
-        ## self.url_evaluate_button.add(self.url_evaluate_label)
-        ## self.url_evaluate_button.connect("clicked", self.url_evaluate)
-        ## self.url_line_box.pack_start(self.url_evaluate_button, 0, 0, 0)
-
         # a placeholder if there aren't any videos to show
         # TODO: find out why this doesn't work or find a different way
         listbox_placeholder = Gtk.Label(
