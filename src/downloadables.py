@@ -9,6 +9,11 @@ from gi.repository import Gtk, Gio, GLib
 from ytdl_wrapper import *
 
 class Downloadable(Gtk.ListBoxRow):
+    """
+    Class used to build individual rows in the main window's ListBox.
+    Each item is based on extracted video info; contains a cover image,
+    textual information, buttons for selecting video format, downloading, etc.
+    """
 
     def __init__(self, main_window, this_item_dict):
         super(Gtk.ListBoxRow, self).__init__()
@@ -173,11 +178,19 @@ class Downloadable(Gtk.ListBoxRow):
 
 
     def get_current_mode(self):
-        """returns one of 'av', 'v', 'a'"""
+        """
+        Returns currently selected 'mode' to be downloaded:
+        one of 'av', 'v', 'a'.
+        """
+
         mode = self.mode_selection.props.active_id
         return mode
 
     def mode_has_been_selected(self, combo):
+        """
+        Runs when user selects video 'mode' (a/v/both) from menu.
+        Adjusts the specific formats menu according to 'mode'.
+        """
 
         selected_mode = self.get_current_mode()
 
@@ -206,6 +219,12 @@ class Downloadable(Gtk.ListBoxRow):
         self.format_selection.props.active = last_item
 
     def create_format_selection(self, initial=False):
+        """
+        Creates a ComboBox listing available formats, according
+        to the currently selcted video 'mode'.
+        """
+
+        # TODO: Get rid of this 'initial' checking; can be done better
         if initial:
             mode = "av"
         else:
@@ -237,9 +256,20 @@ class Downloadable(Gtk.ListBoxRow):
         return format_selection
 
     def format_has_been_selected(self, combo):
+        """
+        When the user selects a video format from list, write the format ID
+        to this item's info dict so that it can be used for download.
+        """
+
         self.this_item_dict["download_format_id"] = combo.props.active_id
 
     def create_format_store(self, mode):
+        """
+        Returns a GTK 'ListStore' containing video formats for given 'mode',
+        in the form of (str: format_id, str: format_name).
+        """
+
+        # TODO: Make format names more human-readable and useful
 
         if mode == "av":
             # this one contains downloads with video and audio
@@ -274,6 +304,11 @@ class Downloadable(Gtk.ListBoxRow):
         return format_store
 
     def download_item(self, widget):
+        """
+        Starts downloading this video based on selected 'format ID'
+        obtained from this item's info dict.
+        """
+
         widget.props.sensitive = False
 
         url = self.url
@@ -291,6 +326,7 @@ class Downloadable(Gtk.ListBoxRow):
 
 def h_m_s_time(seconds):
     """ Convert time from seconds to h:m:s """
+
     duration_total_s = seconds
     duration_m, duration_s = divmod(duration_total_s, 60)
     duration_h, duration_m = divmod(duration_m, 60)

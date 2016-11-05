@@ -12,6 +12,10 @@ from ytdl_wrapper import *
 from downloadables import Downloadable
 
 class MainWindow(Gtk.Window):
+    """
+    Main application window; contains a ListBox showing videos to be downloaded,
+    a 'Paste from Clipboard' button and a 'Download All' button.
+    """
     
     def __init__(self):
         Gtk.Window.__init__(self, title="Video Downloader")
@@ -79,12 +83,19 @@ class MainWindow(Gtk.Window):
 
 
     def launch_download(self, widget):
+        """ Starts downloading all yet-to-be-downloaded videos in list """
+
         # TODO: make this work with individual item downloads
         for item in self.items_list:
             # TODO: download to ~/Downloads by default
             download_vid(item["url"], item["download_format_id"])
 
     def url_pasted(self, widget):
+        """
+        Gets text from the clipboard (if not empty) and hands it over
+        to the 'self.url_evaluate' function.
+        """
+
         self.paste_button.props.sensitive = False
 
         text = self.clipboard.wait_for_text()
@@ -98,6 +109,12 @@ class MainWindow(Gtk.Window):
             self.paste_button.props.sensitive = True
 
     def url_evaluate(self, text):
+        """
+        Checks if the text if a valid youtube_dl video address and if so,
+        extracts info from it to the 'self.items_list' list of dicts
+        and adds new item to the ListBox.
+        """
+
         # self.url_entry.set_progress_fraction(0.4)
         # self.url_entry.props.sensitive = False
         # url_entered = self.url_entry.props.text
@@ -157,6 +174,8 @@ class MainWindow(Gtk.Window):
         self.downloadables_listbox.show_all()
 
     def invalid_url_dialog(self, url):
+        """ Error message if clipboard text isn't a valid video address """
+
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
                  Gtk.ButtonsType.CANCEL, "Invalid address")
         dialog.format_secondary_text(
