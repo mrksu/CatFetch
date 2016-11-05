@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from pprint import pprint
+from threading import Thread
 
 import gi
 gi.require_version('Gtk', '3.0')
@@ -26,6 +27,9 @@ class MainWindow(Gtk.Window):
         #  }
         # ]
         self.items_list = []
+
+        # For pasting video address
+        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
         self.set_default_size(400, 400)
         self.set_border_width(10)
@@ -97,15 +101,18 @@ class MainWindow(Gtk.Window):
             # TODO: download to ~/Downloads by default
             download_vid(item["url"], item["download_format_id"])
 
-    # TODO: remove 'self'
     def url_pasted(self, widget):
-        self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        self.paste_button.props.sensitive = False
+
         text = self.clipboard.wait_for_text()
 
         if text != None:
-            self.url_evaluate(text)
+            # self.url_evaluate(text)
+            thread = Thread(target=self.url_evaluate, args=(text,))
+            thread.start()
         else:
             print("No text in the clipboard!")
+            self.paste_button.props.sensitive = True
 
     def url_evaluate(self, text):
         # self.url_entry.set_progress_fraction(0.4)
@@ -152,6 +159,8 @@ class MainWindow(Gtk.Window):
         ## self.url_entry.props.sensitive = True
 
         self.download_button.props.sensitive = True
+
+        self.paste_button.props.sensitive = True
 
     def downloadables_refresh(self, items_list):
         self.outer_box.remove(self.downloadables_listbox)
