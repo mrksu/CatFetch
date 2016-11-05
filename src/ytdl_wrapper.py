@@ -85,11 +85,12 @@ def pprint_info_dict(url):
 
     pprint(info_dict)
 
-def download_vid(url, vid_format):
+def download_vid(url, vid_format, where):
     dow_ydl_opts = {
         "logger": MyLogger(),
         "progress_hooks": [my_hook],
-        "format": vid_format
+        "format": vid_format,
+        "outtmpl": where
     }
 
     dow_ydl = youtube_dl.YoutubeDL(dow_ydl_opts)

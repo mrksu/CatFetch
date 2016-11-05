@@ -2,7 +2,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, GLib
 
 from ytdl_wrapper import *
 
@@ -272,7 +272,13 @@ class Downloadable(Gtk.ListBoxRow):
         return format_store
 
     def download_item(self, widget):
-        download_vid(self.url, self.this_item_dict["download_format_id"])
+        format_id = self.this_item_dict["download_format_id"]
+        # TODO: Make the directory configurable
+        downloads_dir = GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
+        # TODO: get title and extension from dict based on format id selected
+        where = "{}/{}.{}".format(downloads_dir, "title", "extension")
+
+        download_vid(self.url, format_id, where)
 
 
 

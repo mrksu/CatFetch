@@ -92,6 +92,7 @@ class MainWindow(Gtk.Window):
 
 
     def launch_download(self, widget):
+        # TODO: make this work with individual item downloads
         for item in self.items_list:
             # TODO: download to ~/Downloads by default
             download_vid(item["url"], item["download_format_id"])
