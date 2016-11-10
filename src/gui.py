@@ -5,7 +5,7 @@ from threading import Thread
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GLib
 
 import youtube_dl
 from ytdl_wrapper import *
@@ -103,6 +103,7 @@ class MainWindow(Gtk.Window):
         if text != None:
             # self.url_evaluate(text)
             thread = Thread(target=self.url_evaluate, args=(text,))
+            thread.daemon = True
             thread.start()
         else:
             print("No text in the clipboard!")
@@ -141,25 +142,23 @@ class MainWindow(Gtk.Window):
             "status": "waiting"
         })
 
-        listbox_row = Downloadable(self, self.items_list[-1])
+        # Add a new row to the videos list
+        # This must be done in a GTK-specific threading way
+        GLib.idle_add(self.add_listbox_row, self.items_list[-1])
 
-        self.items_list[-1]["listbox_row"] = listbox_row
+    def add_listbox_row(self, downloadable_item_dict):
+        """
+        Creates a ListBoxRow -- a new item showing selected video information
+        and options; adds it to the main windows ListBox.
+        Should be called in a non-blocking way.
+        """
 
+        listbox_row = Downloadable(self, downloadable_item_dict)
+        downloadable_item_dict["listbox_row"] = listbox_row
         self.downloadables_listbox.add(listbox_row)
         self.downloadables_listbox.show_all()
 
-        ## video_title = ytdl_info_dict["title"]
-        ## video_description = ytdl_info_dict["description"]
-        ## video_duration = ytdl_info_dict["duration"]
-        ## video_website = ytdl_info_dict["extractor_key"]
-        ## video_thumbnail_url = ytdl_info_dict["thumbnail"]
-        ## video_uploader = ytdl_info_dict["uploader"]
-
-        ## self.url_entry.props.text = ""
-        ## self.url_entry.props.sensitive = True
-
         self.download_button.props.sensitive = True
-
         self.paste_button.props.sensitive = True
 
     def downloadables_refresh(self, items_list):
