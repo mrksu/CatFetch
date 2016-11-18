@@ -48,6 +48,8 @@ class Downloadable(Gtk.ListBoxRow):
         )
         # ellipsize characters at the end
         self.video_title_label.props.ellipsize = 3
+        # align text to the left
+        self.video_title_label.props.xalign = 0
 
         # Convert time from seconds to h:m:s
         dur_h, dur_m, dur_s = h_m_s_time(self.info_dict["duration"])
@@ -55,6 +57,8 @@ class Downloadable(Gtk.ListBoxRow):
         self.video_duration_label = Gtk.Label(
             "{}:{}:{}".format(dur_h, dur_m, dur_s)
         )
+        # align text to the left
+        self.video_duration_label.props.xalign = 0
 
         self.info_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.info_widget.pack_start(self.video_title_label, 1, 0, 0)
