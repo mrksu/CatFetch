@@ -131,6 +131,9 @@ class MainWindow(Gtk.Window):
         # url_entered = self.url_entry.props.text
         url_entered = text
 
+        # TODO: Warning: This try-except block no longer works now that
+        # the applications is multi-threaded. Invalid video address causes
+        # the program to crash badly. Fix it
         try:
             ytdl_info_dict = extract_vid_info(url_entered)
             # pprint(self.ytdl_info_dict)
