@@ -64,9 +64,19 @@ class MainWindow(Gtk.Window):
             "Paste video address from the clipboard"
         self.headerbar.pack_start(self.paste_button)
 
+        # This is a general outer box; it is not useful now but may be later.
+        # Also may be deleted if I feel like it.
         self.outer_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, 
             spacing=10)
         self.add(self.outer_box)
+
+        # Let the main content be scrollable
+        self.scroll_envelope = Gtk.ScrolledWindow()
+        # Show scrollbar for vertical direction if needed. Never show
+        # horizontal scrollbar.
+        self.scroll_envelope.set_policy(Gtk.PolicyType.NEVER,
+                                        Gtk.PolicyType.AUTOMATIC)
+        self.outer_box.pack_start(self.scroll_envelope, 1, 1, 0)
 
         # a placeholder if there aren't any videos to show
         # TODO: find out why this doesn't work or find a different way
@@ -79,7 +89,7 @@ class MainWindow(Gtk.Window):
         # Make rows non-selectable
         self.downloadables_listbox.props.selection_mode = \
             Gtk.SelectionMode.NONE
-        self.outer_box.add(self.downloadables_listbox)
+        self.scroll_envelope.add(self.downloadables_listbox)
 
 
     def launch_download(self, widget):
