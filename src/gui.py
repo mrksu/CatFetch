@@ -134,10 +134,28 @@ class MainWindow(Gtk.Window):
         try:
             ytdl_info_dict = extract_vid_info(url_entered)
             # pprint(self.ytdl_info_dict)
-        except youtube_dl.utils.DownloadError as error_msg:
+        except youtube_dl.utils.DownloadError as ytdl_msg:
+            # Slicing off the initial 18 characters from exception here because
+            # the messages's beginning is just a general 'ERROR' text
+            # with red-color formatting which doesn't translate nicely 
+            # into non-terminal output anyway.
+            error_msg = "{}".format(ytdl_msg)[18:]
             # Show an error dialog
             GLib.idle_add(self.invalid_url_dialog, url_entered, error_msg)
             # Make Paste button sensitive
+            self.paste_button.props.sensitive = True
+            return
+
+        # youtube_dl falls back on 'Generic' extractor if the website
+        # may contain a video but it is not accessible in the standard way.
+        # It could produce valid download; on the other hand, it will
+        # happily process a JPEG from an image hosting site. At least
+        # for now, let's just ignore the output and treat it as an error.
+        if ytdl_info_dict["extractor_key"] == "Generic":
+            error_msg = "This address may be a direct video link but also " + \
+                        "may not. Guessing could lead to bad results. " + \
+                        "Better download it using another application."
+            GLib.idle_add(self.invalid_url_dialog, url_entered, error_msg)
             self.paste_button.props.sensitive = True
             return
 
@@ -187,12 +205,8 @@ class MainWindow(Gtk.Window):
     def invalid_url_dialog(self, url, error_msg):
         """ Error window if clipboard text isn't a valid video address """
 
-        # Slicing off the initial 18 characters from error_msg here because
-        # the messages's beginning is just a general 'ERROR' text
-        # with red-color formatting which doesn't translate nicely 
-        # into non-terminal output anyway.
         text = "The address you entered is not downloadable:\n\n" + \
-               "{}\n\n".format(error_msg)[18:] + \
+               "{}\n\n".format(error_msg) + \
                "Address: \"{}\"".format(url)
 
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
