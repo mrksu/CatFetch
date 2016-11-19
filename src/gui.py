@@ -131,15 +131,14 @@ class MainWindow(Gtk.Window):
         # url_entered = self.url_entry.props.text
         url_entered = text
 
-        # TODO: Warning: This try-except block no longer works now that
-        # the applications is multi-threaded. Invalid video address causes
-        # the program to crash badly. Fix it
         try:
             ytdl_info_dict = extract_vid_info(url_entered)
             # pprint(self.ytdl_info_dict)
         except youtube_dl.utils.DownloadError:
             # Show an error dialog
-            self.invalid_url_dialog(url_entered)
+            GLib.idle_add(self.invalid_url_dialog, url_entered)
+            # Make Paste button sensitive
+            self.paste_button.props.sensitive = True
             return
 
         available_a_v_s = filter(get_a_v_list, ytdl_info_dict["formats"])
@@ -159,6 +158,9 @@ class MainWindow(Gtk.Window):
         # This must be done in a GTK-specific threading way
         GLib.idle_add(self.add_listbox_row, self.items_list[-1])
 
+        self.download_button.props.sensitive = True
+        self.paste_button.props.sensitive = True
+
     def add_listbox_row(self, downloadable_item_dict):
         """
         Creates a ListBoxRow -- a new item showing selected video information
@@ -170,9 +172,6 @@ class MainWindow(Gtk.Window):
         downloadable_item_dict["listbox_row"] = listbox_row
         self.downloadables_listbox.add(listbox_row)
         self.downloadables_listbox.show_all()
-
-        self.download_button.props.sensitive = True
-        self.paste_button.props.sensitive = True
 
     def downloadables_refresh(self, items_list):
         self.outer_box.remove(self.downloadables_listbox)

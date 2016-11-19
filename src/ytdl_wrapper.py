@@ -66,9 +66,6 @@ def extract_vid_info(url):
 
     info_ydl = youtube_dl.YoutubeDL(info_ydl_opts)
     # this creates a huge dict containing detailed video info
-    # TODO: When the video is unreachable at your location,
-    # this will result in a youtube_dl.utils.ExtractorError which when handled
-    # causes a youtube_dl.utils.DownloadError. Catch them appropriately.
     info_dict = info_ydl.extract_info(url, download=False)
 
     # this prints format info to stdout, the way youtube-dl does. not really useful.
