@@ -54,7 +54,7 @@ class MainWindow(Gtk.Window):
         # The Download button
         # possible icons: document-save, go-down, emblem-downloads
         self.download_button = Gtk.Button.new_from_icon_name(
-            "document-save", Gtk.IconSize.BUTTON)
+            "document-save-symbolic", Gtk.IconSize.BUTTON)
         self.download_button.connect("clicked", self.launch_download)
         self.download_button.props.sensitive = False
         self.download_button.props.tooltip_text = \
