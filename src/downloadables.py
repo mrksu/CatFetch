@@ -23,6 +23,11 @@ class Downloadable(Gtk.ListBoxRow):
         self.this_item_dict = this_item_dict
         self.url = this_item_dict["url"]
         self.info_dict = this_item_dict["ytdl_info_dict"]
+        
+        # Directory where videos are saved. For now the user's Downloads dir.
+        # TODO: Make the directory cinfigurable
+        self.default_download_dir = \
+            GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
 
         # a horizontal box containing all else in this row
         # TODO: could use borders separating ListBox rows
@@ -319,7 +324,7 @@ class Downloadable(Gtk.ListBoxRow):
         url = self.url
         format_id = self.this_item_dict["download_format_id"]
         # TODO: Make the directory configurable
-        downloads_dir = GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
+        downloads_dir = self.default_download_dir
         # TODO: get title and extension from dict based on format id selected
         where = "{}/{}.{}".format(downloads_dir, "title", "extension")
 
