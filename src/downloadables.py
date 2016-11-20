@@ -7,6 +7,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, GLib
 
 from ytdl_wrapper import *
+from basic_functions import _
 
 class Downloadable(Gtk.ListBoxRow):
     """
@@ -116,9 +117,9 @@ class Downloadable(Gtk.ListBoxRow):
 
         # a ComboBox for mode selection (a/v/both)
         self.mode_store = Gtk.ListStore(str, str)
-        self.mode_store.append(["av", "Video and audio"])
-        self.mode_store.append(["v", "Video only"])
-        self.mode_store.append(["a", "Audio only"])
+        self.mode_store.append(["av", _("Video and audio")])
+        self.mode_store.append(["v", _("Video only")])
+        self.mode_store.append(["a", _("Audio only")])
 
         self.mode_selection = Gtk.ComboBox.new_with_model(self.mode_store)
         self.mode_selection.connect("changed", self.mode_has_been_selected)
@@ -148,7 +149,7 @@ class Downloadable(Gtk.ListBoxRow):
             "document-save", Gtk.IconSize.BUTTON)
         self.download_item_button.connect("clicked", self.download_item)
         self.download_item_button.props.tooltip_text = \
-            "Download this video"
+            _("Download this video")
         self.status_box.pack_start(self.download_item_button, 1, 1, 0)
 
         # # Button combining download and format
@@ -170,7 +171,7 @@ class Downloadable(Gtk.ListBoxRow):
             "applications-system", Gtk.IconSize.BUTTON)
         pop_button.add(pop_icon)
         pop_button.props.tooltip_text = \
-            "Select video and audio format to download"
+            _("Select video and audio format to download")
 
         popover = Gtk.Popover.new(pop_button)
         popover.add(pop_box)

@@ -8,6 +8,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 
 import youtube_dl
+from basic_functions import _
 from ytdl_wrapper import *
 from downloadables import Downloadable
 
@@ -18,7 +19,7 @@ class MainWindow(Gtk.Window):
     """
     
     def __init__(self):
-        Gtk.Window.__init__(self, title="Video Downloader")
+        Gtk.Window.__init__(self, title=_("Video Downloader"))
 
         # a list containing one dictionary per video entered by the user
         # structure:
@@ -40,7 +41,7 @@ class MainWindow(Gtk.Window):
 
         self.headerbar = Gtk.HeaderBar()
         self.headerbar.set_show_close_button(True)
-        self.headerbar.props.title = "Video Downloader"
+        self.headerbar.props.title = _("Video Downloader")
         self.set_titlebar(self.headerbar)
 
 
@@ -54,14 +55,14 @@ class MainWindow(Gtk.Window):
         self.download_button.connect("clicked", self.launch_download)
         self.download_button.props.sensitive = False
         self.download_button.props.tooltip_text = \
-            "Download all waiting videos"
+            _("Download all waiting videos")
         self.headerbar.pack_end(self.download_button)
 
         # The Paste button
-        self.paste_button = Gtk.Button("Paste")
+        self.paste_button = Gtk.Button(_("Paste"))
         self.paste_button.connect("clicked", self.url_pasted)
         self.paste_button.props.tooltip_text = \
-            "Paste video address from the clipboard"
+            _("Paste video address from the clipboard")
         self.headerbar.pack_start(self.paste_button)
 
         # This is a general outer box; it is not useful now but may be later.
@@ -81,7 +82,7 @@ class MainWindow(Gtk.Window):
         # a placeholder if there aren't any videos to show
         # TODO: find out why this doesn't work or find a different way
         listbox_placeholder = Gtk.Label(
-            "Paste videos from the clipboard using the 'Paste' button")
+            _("Paste videos from the clipboard using the 'Paste' button"))
 
         # a ListBox containing added videos to be downloaded
         self.downloadables_listbox = Gtk.ListBox()
@@ -116,7 +117,7 @@ class MainWindow(Gtk.Window):
             thread.daemon = True
             thread.start()
         else:
-            print("No text in the clipboard!")
+            print(_("No text in the clipboard!"))
             self.paste_button.props.sensitive = True
 
     def url_evaluate(self, text):
@@ -152,9 +153,10 @@ class MainWindow(Gtk.Window):
         # happily process a JPEG from an image hosting site. At least
         # for now, let's just ignore the output and treat it as an error.
         if ytdl_info_dict["extractor_key"] == "Generic":
-            error_msg = "This address may be a direct video link but also " + \
-                        "may not. Guessing could lead to bad results. " + \
-                        "Better download it using another application."
+            error_msg = _(''.join(
+                        ["This address may be a direct video link but also ",
+                         "may not. Guessing could lead to bad results. ",
+                         "Better download it using another application."]))
             GLib.idle_add(self.invalid_url_dialog, url_entered, error_msg)
             self.paste_button.props.sensitive = True
             return
@@ -205,12 +207,14 @@ class MainWindow(Gtk.Window):
     def invalid_url_dialog(self, url, error_msg):
         """ Error window if clipboard text isn't a valid video address """
 
-        text = "The address you entered is not downloadable:\n\n" + \
-               "{}\n\n".format(error_msg) + \
-               "Address: \"{}\"".format(url)
+        text = ''.join(
+                [_("The address you entered is not downloadable:"),
+                 "\n\n",
+                 "{}\n\n".format(error_msg),
+                 _("Address: \"{}\"".format(url))])
 
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
-                 Gtk.ButtonsType.CANCEL, "Invalid address")
+                 Gtk.ButtonsType.CANCEL, _("Invalid address"))
         dialog.format_secondary_text(text)
         dialog.run()
         dialog.destroy()
