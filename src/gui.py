@@ -44,9 +44,12 @@ class MainWindow(Gtk.Window):
         self.headerbar.props.title = _("Video Downloader")
         self.set_titlebar(self.headerbar)
 
-
-        # TODO: Add a button for removing all downloaded items from list
-
+        # The Paste button
+        self.paste_button = Gtk.Button(_("Paste"))
+        self.paste_button.connect("clicked", self.url_pasted)
+        self.paste_button.props.tooltip_text = \
+            _("Paste video address from the clipboard")
+        self.headerbar.pack_start(self.paste_button)
 
         # The Download button
         # possible icons: document-save, go-down, emblem-downloads
@@ -58,12 +61,17 @@ class MainWindow(Gtk.Window):
             _("Download all waiting videos")
         self.headerbar.pack_end(self.download_button)
 
-        # The Paste button
-        self.paste_button = Gtk.Button(_("Paste"))
-        self.paste_button.connect("clicked", self.url_pasted)
-        self.paste_button.props.tooltip_text = \
-            _("Paste video address from the clipboard")
-        self.headerbar.pack_start(self.paste_button)
+        # Button for clearing the videos list
+        # TODO: Decide and implement the actual function
+        # (should this remove only downloaded videos or all?)
+        # Possible icons: mail-mark-junk, edit-delete, window-close, user-trash
+        self.clear_button = Gtk.Button.new_from_icon_name(
+            "user-trash-symbolic", Gtk.IconSize.BUTTON)
+        self.clear_button.connect("clicked", self.clear_vid_list)
+        self.clear_button.props.tooltip_text = \
+            _("Clear the list")
+        self.clear_button.props.sensitive = False
+        self.headerbar.pack_end(self.clear_button)
 
         # This is a general outer box; it is not useful now but may be later.
         # Also may be deleted if I feel like it.
@@ -218,6 +226,10 @@ class MainWindow(Gtk.Window):
         dialog.format_secondary_text(text)
         dialog.run()
         dialog.destroy()
+    
+    def clear_vid_list(self):
+        """ Placeholder; see self.clear_button """
+        print("cleared")
 
 
 
