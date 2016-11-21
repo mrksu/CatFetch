@@ -61,7 +61,8 @@ class Downloadable(Gtk.ListBoxRow):
         dur_h, dur_m, dur_s = h_m_s_time(self.info_dict["duration"])
 
         self.video_duration_label = Gtk.Label(
-            "{}:{}:{}".format(dur_h, dur_m, dur_s)
+            # {:02d} means numbers are 2 digits long and padded with 0s if nec.
+            "{}:{:02d}:{:02d}".format(dur_h, dur_m, dur_s)
         )
         # align text to the left
         self.video_duration_label.props.xalign = 0
