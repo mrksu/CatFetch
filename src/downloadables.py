@@ -57,13 +57,18 @@ class Downloadable(Gtk.ListBoxRow):
         # align text to the left
         self.video_title_label.props.xalign = 0
 
-        # Convert time from seconds to h:m:s
-        dur_h, dur_m, dur_s = h_m_s_time(self.info_dict["duration"])
+        # For some videos, time cannot be extracted
+        if "duration" in self.info_dict:
+            # Convert time from seconds to h:m:s
+            dur_h, dur_m, dur_s = h_m_s_time(self.info_dict["duration"])
 
-        self.video_duration_label = Gtk.Label(
-            # {:02d} means numbers are 2 digits long and padded with 0s if nec.
-            "{}:{:02d}:{:02d}".format(dur_h, dur_m, dur_s)
-        )
+            self.video_duration_label = Gtk.Label(
+                # {:02d} means numbers are 2 digits long and padded with 0s if nec.
+                "{}:{:02d}:{:02d}".format(dur_h, dur_m, dur_s)
+            )
+        else:
+            self.video_duration_label = Gtk.Label("--:--:--")
+        
         # align text to the left
         self.video_duration_label.props.xalign = 0
 
