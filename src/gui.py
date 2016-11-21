@@ -132,7 +132,7 @@ class MainWindow(Gtk.Window):
         """
         Checks if the text if a valid youtube_dl video address and if so,
         extracts info from it to the 'self.items_list' list of dicts
-        and adds new item to the ListBox.
+        and launches further functions for adding the video.
         """
 
         # self.url_entry.set_progress_fraction(0.4)
@@ -169,12 +169,26 @@ class MainWindow(Gtk.Window):
             self.paste_button.props.sensitive = True
             return
 
+        # Register the extracted information globally
+        self.add_new_video(ytdl_info_dict)
+
+        self.download_button.props.sensitive = True
+        self.paste_button.props.sensitive = True
+    
+    def add_new_video(self, ytdl_info_dict):
+        """
+        Adds extracted video info to the global list. Then proceeds with
+        the 'add_listbox_row' function which creates a new visible row for
+        the current video.
+        """
+        url = ytdl_info_dict["webpage_url"]
+        
         available_a_v_s = filter(get_a_v_list, ytdl_info_dict["formats"])
         available_video_s = filter(get_video_list, ytdl_info_dict["formats"])
         available_audio_s = filter(get_audio_list, ytdl_info_dict["formats"])
 
         self.items_list.append({
-            "url": url_entered,
+            "url": url,
             "ytdl_info_dict": ytdl_info_dict,
             "available_a_v_s": available_a_v_s,
             "available_video_s": available_video_s,
@@ -185,9 +199,6 @@ class MainWindow(Gtk.Window):
         # Add a new row to the videos list
         # This must be done in a GTK-specific threading way
         GLib.idle_add(self.add_listbox_row, self.items_list[-1])
-
-        self.download_button.props.sensitive = True
-        self.paste_button.props.sensitive = True
 
     def add_listbox_row(self, downloadable_item_dict):
         """
