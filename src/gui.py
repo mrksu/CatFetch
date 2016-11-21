@@ -170,7 +170,16 @@ class MainWindow(Gtk.Window):
             return
 
         # Register the extracted information globally
-        self.add_new_video(ytdl_info_dict)
+        # The retrieved information can contain a single video or a playlist.
+        # If it's a playlist, add all contained videos:
+        if "_type" in ytdl_info_dict and ytdl_info_dict["_type"] == "playlist":
+            
+            for each_entry_dict in ytdl_info_dict["entries"]:
+                self.add_new_video(each_entry_dict)
+        
+        # If it's just a regular video, add it:
+        else:
+            self.add_new_video(ytdl_info_dict)
 
         self.download_button.props.sensitive = True
         self.paste_button.props.sensitive = True
