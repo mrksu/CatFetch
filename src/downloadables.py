@@ -343,7 +343,8 @@ class Downloadable(Gtk.ListBoxRow):
 def h_m_s_time(seconds):
     """ Convert time from seconds to h:m:s """
 
-    duration_total_s = seconds
+    # Some sites seem to provide duration as a float...?
+    duration_total_s = int(seconds)
     duration_m, duration_s = divmod(duration_total_s, 60)
     duration_h, duration_m = divmod(duration_m, 60)
     
