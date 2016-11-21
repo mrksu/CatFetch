@@ -192,6 +192,8 @@ class MainWindow(Gtk.Window):
         """
         url = ytdl_info_dict["webpage_url"]
         
+        # TODO: Some sites don't provide separate audio and video.
+        #       Don't require it.
         available_a_v_s = filter(get_a_v_list, ytdl_info_dict["formats"])
         available_video_s = filter(get_video_list, ytdl_info_dict["formats"])
         available_audio_s = filter(get_audio_list, ytdl_info_dict["formats"])
