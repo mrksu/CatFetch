@@ -326,7 +326,9 @@ class Downloadable(Gtk.ListBoxRow):
 
             for av_format in self.this_item_dict["available_a_v_s"]:
                 format_id = av_format["format_id"]
-                format_name = av_format["format"]
+                format_name = human_readable_format(
+                    format_id, self.info_dict, short=True
+                )
                 format_store.append([format_id, format_name])
 
         elif mode == "v":
@@ -335,7 +337,9 @@ class Downloadable(Gtk.ListBoxRow):
 
             for video_format in self.this_item_dict["available_video_s"]:
                 format_id = video_format["format_id"]
-                format_name = video_format["format"]
+                format_name = human_readable_format(
+                    format_id, self.info_dict, short=True
+                )
                 format_store.append([format_id, format_name])
 
         elif mode == "a":
@@ -344,7 +348,9 @@ class Downloadable(Gtk.ListBoxRow):
 
             for audio_format in self.this_item_dict["available_audio_s"]:
                 format_id = audio_format["format_id"]
-                format_name = audio_format["format"]
+                format_name = human_readable_format(
+                    format_id, self.info_dict, short=True
+                )
                 format_store.append([format_id, format_name])
 
         else:
@@ -406,10 +412,11 @@ def get_format_by_id(format_id, ytdl_info_dict):
     # if no correct format dict is found:
     return None
 
-def human_readable_format(format_id, ytdl_info_dict):
+def human_readable_format(format_id, ytdl_info_dict, short=False):
     """
     Returns a string containing detailed, human-readable description
-    of the provided Format ID based on the provided ytdl_info_dict
+    of the provided Format ID based on the provided ytdl_info_dict.
+    Accepts short=True as an optional argument, mainly for the popover menu.
     """
     format_dict = get_format_by_id(format_id, ytdl_info_dict)
     
@@ -445,17 +452,26 @@ def human_readable_format(format_id, ytdl_info_dict):
         audio = False
     
     if video and audio:
-        h_r_format = "{} {}, {}, {} MiB .{}".format(
-            resolution, vcodec, acodec, filesize, ext
-        )
+        if short:
+            h_r_format = "{}, {}, {}".format(resolution, vcodec, acodec)
+        else:
+            h_r_format = "{} {}, {}, {} MiB .{}".format(
+                resolution, vcodec, acodec, filesize, ext
+            )
     elif video:
-        h_r_format = "{} {}, {} MiB .{}".format(
-            resolution, vcodec, filesize, ext
-        )
+        if short:
+            h_r_format = "{}, {}, .{}".format(resolution, vcodec, ext)
+        else:
+            h_r_format = "{} {}, {} MiB .{}".format(
+                resolution, vcodec, filesize, ext
+            )
     elif audio:
-        h_r_format = "{} kb/s {}, {} MiB .{}".format(
-            abr, acodec, filesize, ext
-        )
+        if short:
+            h_r_format = "{} kb/s, {}, .{}".format(abr, acodec, ext)
+        else:
+            h_r_format = "{} kb/s {}, {} MiB .{}".format(
+                abr, acodec, filesize, ext
+            )
     else:
         h_r_format = "{} MiB .{}".format(
             filesize, ext
