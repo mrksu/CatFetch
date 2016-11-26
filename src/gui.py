@@ -192,9 +192,12 @@ class MainWindow(Gtk.Window):
         """
         url = ytdl_info_dict["webpage_url"]
         
-        available_a_v_s = filter(get_a_v_list, ytdl_info_dict["formats"])
-        available_video_s = filter(get_video_list, ytdl_info_dict["formats"])
-        available_audio_s = filter(get_audio_list, ytdl_info_dict["formats"])
+        formats_list = ytdl_info_dict["formats"]
+        
+        # Build lists containing audio-only, video-only and a/v format options
+        available_a_v_s = [av for av in formats_list if is_both_a_v(av)]
+        available_video_s = [v for v in formats_list if is_video_only(v)]
+        available_audio_s = [a for a in formats_list if is_audio_only(a)]
 
         self.items_list.append({
             "url": url,

@@ -98,7 +98,7 @@ def download_vid(url, vid_format, where):
 # info_dict = extract_vid_info("https://www.youtube.com/watch?v=ylzkOPBrdx0")
 
 # TODO: Some sites don't provide separate audio and video. Don't require it.
-def get_audio_list(formats_item):
+def is_audio_only(formats_item):
     # Some websites provide little information; by default evaluate to a/v
     if not "acodec" in formats_item or not "vcodec" in formats_item:
         return False
@@ -107,7 +107,7 @@ def get_audio_list(formats_item):
     else:
         return False
 
-def get_video_list(formats_item):
+def is_video_only(formats_item):
     # Some websites provide little information; by default evaluate to a/v
     if not "acodec" in formats_item or not "vcodec" in formats_item:
         return False
@@ -116,7 +116,7 @@ def get_video_list(formats_item):
     else:
         return False
 
-def get_a_v_list(formats_item):
+def is_both_a_v(formats_item):
     # Some websites provide little information; by default evaluate to a/v
     if not "acodec" in formats_item or not "vcodec" in formats_item:
         return True
