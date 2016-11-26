@@ -172,6 +172,14 @@ class Downloadable(Gtk.ListBoxRow):
         # this means the first item (Video and audio) will be pre-selected
         self.mode_selection.props.active = 0
         # self.av_selection_box.pack_start(self.mode_selection, 0, 0, 0)
+        
+        # If there are only a/v formats available, disable the dropdown
+        # TODO: Do this more pleasantly, also avoiding creation of stores
+        if len(self.this_item_dict["available_audio_s"]) == 0 \
+        and len(self.this_item_dict["available_video_s"]) == 0:
+            self.mode_selection.props.sensitive = False
+        else:
+            pass
 
         # self.main_window.options_button = Gtk.Button("Formats")
         # self.main_window.options_button.connect("clicked", self.open_formats_dialog)
