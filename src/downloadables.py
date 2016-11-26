@@ -56,6 +56,12 @@ class Downloadable(Gtk.ListBoxRow):
         self.video_title_label.props.ellipsize = 3
         # align text to the left
         self.video_title_label.props.xalign = 0
+        
+        self.info_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        self.info_widget.pack_start(self.video_title_label, 1, 0, 0)
+        
+        # This box contains various video info and is horizontally aligned
+        self.video_details_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
         # For some videos, time cannot be extracted
         if "duration" in self.info_dict:
@@ -72,9 +78,24 @@ class Downloadable(Gtk.ListBoxRow):
         # align text to the left
         self.video_duration_label.props.xalign = 0
 
-        self.info_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.info_widget.pack_start(self.video_title_label, 1, 0, 0)
-        self.info_widget.pack_start(self.video_duration_label, 0, 0, 0)
+        self.video_details_box.pack_start(self.video_duration_label, 0, 0, 0)
+        
+        # separator: a label containing just " | "
+        self.video_details_box.pack_start(separator(), 0, 0, 0)
+        
+        # label displaying the website hosting the video
+        if "extractor_key" in self.info_dict:
+            video_hosting = self.info_dict["extractor_key"]
+        # not sure if all websites provide the more readable extractor_key
+        else:
+            video_hosting = self.info_dict["extractor"]
+        
+        video_hosting_label = Gtk.Label(video_hosting)
+        video_hosting_label.props.xalign = 0
+        self.video_details_box.pack_start(video_hosting_label, 0, 0, 0)
+
+        self.info_widget.pack_start(self.video_details_box, 0, 0, 0)
+        
         self.hbox.pack_start(self.info_widget, 1, 1, 0)
 
         # and now a ComboBox for format selection
@@ -349,4 +370,9 @@ def h_m_s_time(seconds):
     duration_h, duration_m = divmod(duration_m, 60)
     
     return (duration_h, duration_m, duration_s)
+
+def separator():
+    label = Gtk.Label(" | ")
+    label.props.xalign = 0
+    return label
 
