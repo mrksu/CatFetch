@@ -93,6 +93,13 @@ class Downloadable(Gtk.ListBoxRow):
         video_hosting_label = Gtk.Label(video_hosting)
         video_hosting_label.props.xalign = 0
         self.video_details_box.pack_start(video_hosting_label, 0, 0, 0)
+        self.video_details_box.pack_start(separator(), 0, 0, 0)
+        
+        # label showing currently selected video format; empty by default:
+        # will be filled in by the self.show_selected_format function
+        self.selected_format_label = Gtk.Label("-")
+        self.selected_format_label.props.xalign = 0
+        self.video_details_box.pack_start(self.selected_format_label, 0, 0, 0)
 
         self.info_widget.pack_start(self.video_details_box, 0, 0, 0)
         
@@ -298,7 +305,10 @@ class Downloadable(Gtk.ListBoxRow):
         to this item's info dict so that it can be used for download.
         """
 
-        self.this_item_dict["download_format_id"] = combo.props.active_id
+        selected_format = combo.props.active_id
+        self.this_item_dict["download_format_id"] = selected_format
+        # update the label displaying currently selected format
+        self.show_selected_format(selected_format)
 
     def create_format_store(self, mode):
         """
@@ -358,6 +368,9 @@ class Downloadable(Gtk.ListBoxRow):
         # download_vid(url, format_id, where)
         thread = Thread(target=download_vid, args=(url, format_id, where,))
         thread.start()
+    
+    def show_selected_format(self, sel_format):
+        self.selected_format_label.set_markup("<b>{}</b>".format(sel_format))
 
 
 
