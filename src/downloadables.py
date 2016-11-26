@@ -385,10 +385,17 @@ class Downloadable(Gtk.ListBoxRow):
 
         url = self.url
         format_id = self.this_item_dict["download_format_id"]
+        format_dict = get_format_by_id(format_id, self.info_dict)
+        
         # TODO: Make the directory configurable
         downloads_dir = self.default_download_dir
-        # TODO: get title and extension from dict based on format id selected
-        where = "{}/{}.{}".format(downloads_dir, "title", "extension")
+        
+        title = self.info_dict["title"]
+        extension = format_dict["ext"]
+
+        # This is where we create the actual download path and filename
+        where = "{}/{} (fmt {}).{}".format(
+            downloads_dir, title, format_id, extension)
 
         # download_vid(url, format_id, where)
         thread = Thread(target=download_vid, args=(url, format_id, where,))
