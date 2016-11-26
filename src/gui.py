@@ -25,10 +25,10 @@ class MainWindow(Gtk.Window):
         # structure:
         # [
         #  {
-        #   "url": "https://...",
-        #   "ytdl_info_dict": <dict>,
-        #   "listbox_row": <ListBoxRow>,
-        #   "status": "waiting" or "downloaded"
+        #   "url":              "https://...",
+        #   "ytdl_info_dict":   <dict>,
+        #   "listbox_row":      a <ListBoxRow> instance,
+        #   "status":           "waiting" or "downloaded" or "downloading"
         #  }
         # ]
         self.items_list = []
@@ -104,10 +104,10 @@ class MainWindow(Gtk.Window):
     def launch_download(self, widget):
         """ Starts downloading all yet-to-be-downloaded videos in list """
 
-        # TODO: make this work with individual item downloads
+        # Simply execute the download method of each row instance
+        # This is already threaded
         for item in self.items_list:
-            # TODO: download to ~/Downloads by default
-            download_vid(item["url"], item["download_format_id"])
+            item["listbox_row"].download_item(widget)
 
     def url_pasted(self, widget):
         """
