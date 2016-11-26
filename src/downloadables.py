@@ -399,6 +399,8 @@ class Downloadable(Gtk.ListBoxRow):
 
         # download_vid(url, format_id, where)
         thread = Thread(target=download_vid, args=(url, format_id, where,))
+        # making this a daemon so that it stops when closing application window
+        thread.daemon = True
         thread.start()
     
     def show_selected_format(self, format_id):
