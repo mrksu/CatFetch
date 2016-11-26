@@ -99,19 +99,28 @@ def download_vid(url, vid_format, where):
 
 # TODO: Some sites don't provide separate audio and video. Don't require it.
 def get_audio_list(formats_item):
-    if formats_item["acodec"] != "none" and formats_item["vcodec"] == "none":
+    # Some websites provide little information; by default evaluate to a/v
+    if not "acodec" in formats_item or not "vcodec" in formats_item:
+        return False
+    elif formats_item["acodec"] != "none" and formats_item["vcodec"] == "none":
         return True
     else:
         return False
 
 def get_video_list(formats_item):
-    if formats_item["acodec"] == "none" and formats_item["vcodec"] != "none":
+    # Some websites provide little information; by default evaluate to a/v
+    if not "acodec" in formats_item or not "vcodec" in formats_item:
+        return False
+    elif formats_item["acodec"] == "none" and formats_item["vcodec"] != "none":
         return True
     else:
         return False
 
 def get_a_v_list(formats_item):
-    if formats_item["acodec"] != "none" and formats_item["vcodec"] != "none":
+    # Some websites provide little information; by default evaluate to a/v
+    if not "acodec" in formats_item or not "vcodec" in formats_item:
+        return True
+    elif formats_item["acodec"] != "none" and formats_item["vcodec"] != "none":
         return True
     else:
         return False
