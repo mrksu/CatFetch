@@ -201,8 +201,17 @@ class Downloadable(Gtk.ListBoxRow):
         # self.hbox.pack_end(self.download_and_format_button, 0, 0, 0)
 
         # a Gtk.Box Popover
-        pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
+        pop_box.props.margin = 5
+        
+        pop_mode_label = Gtk.Label(_("Mode:"))
+        pop_mode_label.props.xalign = 0
+        pop_format_label = Gtk.Label(_("Format:"))
+        pop_format_label.props.xalign = 0
+        
+        pop_box.pack_start(pop_mode_label, 0, 0, 0)
         pop_box.pack_start(self.mode_selection, 0, 0, 0)
+        pop_box.pack_start(pop_format_label, 0, 0, 0)
         pop_box.pack_start(self.format_selection, 0, 0, 0)
         
         # ...from a button
