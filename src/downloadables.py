@@ -99,6 +99,8 @@ class Downloadable(Gtk.ListBoxRow):
         # will be filled in by the self.show_selected_format function
         self.selected_format_label = Gtk.Label("-")
         self.selected_format_label.props.xalign = 0
+        # ellipsize characters at the end
+        self.selected_format_label.props.ellipsize = 3
         self.video_details_box.pack_start(self.selected_format_label, 0, 0, 0)
 
         self.info_widget.pack_start(self.video_details_box, 0, 0, 0)
@@ -369,8 +371,9 @@ class Downloadable(Gtk.ListBoxRow):
         thread = Thread(target=download_vid, args=(url, format_id, where,))
         thread.start()
     
-    def show_selected_format(self, sel_format):
-        self.selected_format_label.set_markup("<b>{}</b>".format(sel_format))
+    def show_selected_format(self, format_id):
+        hum_readable = human_readable_format(format_id, self.info_dict)
+        self.selected_format_label.set_markup("<b>{}</b>".format(hum_readable))
 
 
 
@@ -388,4 +391,75 @@ def separator():
     label = Gtk.Label(" | ")
     label.props.xalign = 0
     return label
+
+def get_format_by_id(format_id, ytdl_info_dict):
+    """
+    Searches given ytdl_info_dict and returns the (first) format dict that
+    has the given format_id
+    """
+    for format_dict in ytdl_info_dict["formats"]:
+        if format_dict["format_id"] == format_id:
+            return format_dict
+        else:
+            pass
+    
+    # if no correct format dict is found:
+    return None
+
+def human_readable_format(format_id, ytdl_info_dict):
+    """
+    Returns a string containing detailed, human-readable description
+    of the provided Format ID based on the provided ytdl_info_dict
+    """
+    format_dict = get_format_by_id(format_id, ytdl_info_dict)
+    
+    ext = format_dict["ext"] if "ext" in format_dict else "?"
+
+    if "filesize" in format_dict and format_dict["filesize"] == "none":
+        # let's convert size to MiB
+        filesize = format_dict["filesize"] / 1048576
+    else:
+        filesize = "?"
+    
+    if "vcodec" in format_dict and format_dict["vcodec"] != "none":
+        video = True
+        vcodec = format_dict["vcodec"]
+        
+        if "resolution" in format_dict:
+            resolution = format_dict["resolution"]
+        elif "width" in format_dict and "height" in format_dict:
+            width = format_dict["width"]
+            height = format_dict["height"]
+            resolution = "{}x{}".format(width, height)
+        else:
+            resolution = "?"
+        
+    else:
+        video = False
+    
+    if "acodec" in format_dict and format_dict["acodec"] != "none":
+        audio = True
+        acodec = format_dict["acodec"]
+        abr = format_dict["abr"] if "abr" in format_dict else "?"
+    else:
+        audio = False
+    
+    if video and audio:
+        h_r_format = "{} {}, {}, {} MiB .{}".format(
+            resolution, vcodec, acodec, filesize, ext
+        )
+    elif video:
+        h_r_format = "{} {}, {} MiB .{}".format(
+            resolution, vcodec, filesize, ext
+        )
+    elif audio:
+        h_r_format = "{} kb/s {}, {} MiB .{}".format(
+            abr, acodec, filesize, ext
+        )
+    else:
+        h_r_format = "{} MiB .{}".format(
+            filesize, ext
+        )
+    
+    return h_r_format
 
