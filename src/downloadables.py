@@ -404,7 +404,7 @@ class Downloadable(Gtk.ListBoxRow):
         format_id = self.this_item_dict["download_format_id"]
         format_dict = get_format_by_id(format_id, self.info_dict)
         
-        # TODO: Make the directory configurable
+        # Default dir or selected by the popover button
         downloads_dir = self.selected_download_dir
         
         title = self.info_dict["title"]
