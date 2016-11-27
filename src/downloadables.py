@@ -224,8 +224,12 @@ class Downloadable(Gtk.ListBoxRow):
         destination_button = Gtk.Button()
         destination_button.connect("clicked", self.set_download_dir)
         self.destination_label = Gtk.Label(self.selected_download_dir)
-        # TODO: ellipsize doesn't work. Why?
-        # self.destination_label.props.ellipsize(2)
+        # ellipsize in the middle
+        self.destination_label.props.ellipsize = 2
+        # Maximum width which is displayed fo the directory;
+        # it shoudl be roughly similar to how long mode and format description
+        # are so 25 seems reasonable
+        self.destination_label.props.max_width_chars = 25
         destination_button.add(self.destination_label)
         
         pop_box.pack_start(pop_mode_label, 0, 0, 0)
@@ -425,12 +429,8 @@ class Downloadable(Gtk.ListBoxRow):
         Runs the filechooser and updates the self.selected_download_dir variable
         """
         self.main_window.dir_chooser(self)
-        dest_text_whole = self.selected_download_dir
-        # ellipsize doesn't work on the label; as a workaround, let's only
-        # use the last path element to make text shorter
-        # TODO: fix ellipsize
-        dest_text_end = dest_text_whole.split("/")[-1]
-        self.destination_label.set_text(dest_text_end)
+        destination_text = self.selected_download_dir
+        self.destination_label.set_text(destination_text)
 
 
 
