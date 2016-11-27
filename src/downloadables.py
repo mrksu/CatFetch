@@ -221,23 +221,25 @@ class Downloadable(Gtk.ListBoxRow):
         pop_destination_label.props.xalign = 0
         
         # Button used to open the filechooser (dir_chooser)
-        destination_button = Gtk.Button()
-        destination_button.connect("clicked", self.set_download_dir)
+        self.destination_button = Gtk.Button()
+        self.destination_button.connect("clicked", self.set_download_dir)
+        # tooltip show the whole path
+        self.destination_button.props.tooltip_text = self.selected_download_dir
         self.destination_label = Gtk.Label(self.selected_download_dir)
         # ellipsize in the middle
         self.destination_label.props.ellipsize = 2
         # Maximum width which is displayed fo the directory;
-        # it shoudl be roughly similar to how long mode and format description
+        # it should be roughly similar to how long mode and format description
         # are so 25 seems reasonable
         self.destination_label.props.max_width_chars = 25
-        destination_button.add(self.destination_label)
+        self.destination_button.add(self.destination_label)
         
         pop_box.pack_start(pop_mode_label, 0, 0, 0)
         pop_box.pack_start(self.mode_selection, 0, 0, 0)
         pop_box.pack_start(pop_format_label, 0, 0, 0)
         pop_box.pack_start(self.format_selection, 0, 0, 0)
         pop_box.pack_start(pop_destination_label, 0, 0, 0)
-        pop_box.pack_start(destination_button, 0, 0, 0)
+        pop_box.pack_start(self.destination_button, 0, 0, 0)
         
         # ...from a button
         pop_button = Gtk.MenuButton()
@@ -431,6 +433,7 @@ class Downloadable(Gtk.ListBoxRow):
         self.main_window.dir_chooser(self)
         destination_text = self.selected_download_dir
         self.destination_label.set_text(destination_text)
+        self.destination_button.props.tooltip_text = destination_text
 
 
 
