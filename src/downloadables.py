@@ -506,29 +506,29 @@ def human_readable_format(format_id, ytdl_info_dict, short=False):
         if short:
             h_r_format = "{}, {}, {}".format(resolution, vcodec, acodec)
         else:
-            h_r_format = "{} {}, {}, {} MiB, .{}".format(
-                resolution, vcodec, acodec, filesize, ext
+            h_r_format = "{} {}, {}, *.{}".format(
+                resolution, vcodec, acodec, ext
             )
     elif video:
         if short:
-            h_r_format = "{}, {}, .{}".format(resolution, vcodec, ext)
+            h_r_format = "{}, {}, *.{}".format(resolution, vcodec, ext)
         else:
-            h_r_format = "{} {}, {} MiB, .{}".format(
-                resolution, vcodec, filesize, ext
+            h_r_format = "{} {}, *.{}".format(
+                resolution, vcodec, ext
             )
     elif audio:
         if short:
-            h_r_format = "{} kb/s, {}, .{}".format(abr, acodec, ext)
+            h_r_format = "{} kb/s, {}, *.{}".format(abr, acodec, ext)
         else:
-            h_r_format = "{} kb/s {}, {} MiB, .{}".format(
-                abr, acodec, filesize, ext
+            h_r_format = "{} kb/s {}, *.{}".format(
+                abr, acodec, ext
             )
     # Some websites provide very little information
     else:
         fallback_name = format_dict["format"] if "format" in format_dict \
             else format_dict["format_id"]
         
-        h_r_format = "{}, {} MiB, .{}".format(
+        h_r_format = "{}, {} MiB, *.{}".format(
             fallback_name, filesize, ext
         )
     
