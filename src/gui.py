@@ -253,6 +253,29 @@ class MainWindow(Gtk.Window):
     def clear_vid_list(self):
         """ Placeholder; see self.clear_button """
         print("cleared")
+    
+    def dir_chooser(self, listbox_row):
+        """
+        A simple filechooser to select the directory where the video file
+        should be saved
+        """
+        dialog = Gtk.FileChooserDialog(_("Select where to save the file:"), self,
+            Gtk.FileChooserAction.SELECT_FOLDER,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+            _("Select"), Gtk.ResponseType.OK))
+        
+        dialog.set_default_size(400, 400)
+        
+        response = dialog.run()
+        
+        if response == Gtk.ResponseType.OK:
+            location = dialog.get_filename()
+            listbox_row.selected_download_dir = location
+        else:
+            # Cancel clicked
+            pass
+        
+        dialog.destroy()
 
 
 

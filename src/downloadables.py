@@ -28,6 +28,7 @@ class Downloadable(Gtk.ListBoxRow):
         # TODO: Make the directory cinfigurable
         self.default_download_dir = \
             GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
+        self.selected_download_dir = self.default_download_dir
 
         # a horizontal box containing all else in this row
         # TODO: could use borders separating ListBox rows
@@ -210,17 +211,29 @@ class Downloadable(Gtk.ListBoxRow):
 
         # a Gtk.Box Popover
         pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-        pop_box.props.margin = 5
+        pop_box.props.margin = 10
         
         pop_mode_label = Gtk.Label(_("Mode:"))
         pop_mode_label.props.xalign = 0
         pop_format_label = Gtk.Label(_("Format:"))
         pop_format_label.props.xalign = 0
+        pop_destination_label = Gtk.Label(_("Where to save:"))
+        pop_destination_label.props.xalign = 0
+        
+        # Button used to open the filechooser (dir_chooser)
+        destination_button = Gtk.Button()
+        destination_button.connect("clicked", self.set_download_dir)
+        self.destination_label = Gtk.Label(self.selected_download_dir)
+        # TODO: ellipsize doesn't work. Why?
+        # self.destination_label.props.ellipsize(2)
+        destination_button.add(self.destination_label)
         
         pop_box.pack_start(pop_mode_label, 0, 0, 0)
         pop_box.pack_start(self.mode_selection, 0, 0, 0)
         pop_box.pack_start(pop_format_label, 0, 0, 0)
         pop_box.pack_start(self.format_selection, 0, 0, 0)
+        pop_box.pack_start(pop_destination_label, 0, 0, 0)
+        pop_box.pack_start(destination_button, 0, 0, 0)
         
         # ...from a button
         pop_button = Gtk.MenuButton()
@@ -388,7 +401,7 @@ class Downloadable(Gtk.ListBoxRow):
         format_dict = get_format_by_id(format_id, self.info_dict)
         
         # TODO: Make the directory configurable
-        downloads_dir = self.default_download_dir
+        downloads_dir = self.selected_download_dir
         
         title = self.info_dict["title"]
         extension = format_dict["ext"]
@@ -406,6 +419,18 @@ class Downloadable(Gtk.ListBoxRow):
     def show_selected_format(self, format_id):
         hum_readable = human_readable_format(format_id, self.info_dict)
         self.selected_format_label.set_markup("<b>{}</b>".format(hum_readable))
+    
+    def set_download_dir(self, widget):
+        """
+        Runs the filechooser and updates the self.selected_download_dir variable
+        """
+        self.main_window.dir_chooser(self)
+        dest_text_whole = self.selected_download_dir
+        # ellipsize doesn't work on the label; as a workaround, let's only
+        # use the last path element to make text shorter
+        # TODO: fix ellipsize
+        dest_text_end = dest_text_whole.split("/")[-1]
+        self.destination_label.set_text(dest_text_end)
 
 
 
