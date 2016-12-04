@@ -7,6 +7,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, GLib
 
 from ytdl_wrapper import *
+import basic_functions as bf
 from basic_functions import _
 
 class Downloadable(Gtk.ListBoxRow):
@@ -67,7 +68,7 @@ class Downloadable(Gtk.ListBoxRow):
         # For some videos, time cannot be extracted
         if "duration" in self.info_dict:
             # Convert time from seconds to h:m:s
-            dur_h, dur_m, dur_s = h_m_s_time(self.info_dict["duration"])
+            dur_h, dur_m, dur_s = bf.h_m_s_time(self.info_dict["duration"])
 
             self.video_duration_label = Gtk.Label(
                 # {:02d} means numbers are 2 digits long and padded with 0s if nec.
@@ -362,7 +363,7 @@ class Downloadable(Gtk.ListBoxRow):
 
             for av_format in self.this_item_dict["available_a_v_s"]:
                 format_id = av_format["format_id"]
-                format_name = human_readable_format(
+                format_name = bf.human_readable_format(
                     format_id, self.info_dict, short=True
                 )
                 format_store.append([format_id, format_name])
@@ -373,7 +374,7 @@ class Downloadable(Gtk.ListBoxRow):
 
             for video_format in self.this_item_dict["available_video_s"]:
                 format_id = video_format["format_id"]
-                format_name = human_readable_format(
+                format_name = bf.human_readable_format(
                     format_id, self.info_dict, short=True
                 )
                 format_store.append([format_id, format_name])
@@ -384,7 +385,7 @@ class Downloadable(Gtk.ListBoxRow):
 
             for audio_format in self.this_item_dict["available_audio_s"]:
                 format_id = audio_format["format_id"]
-                format_name = human_readable_format(
+                format_name = bf.human_readable_format(
                     format_id, self.info_dict, short=True
                 )
                 format_store.append([format_id, format_name])
@@ -404,7 +405,7 @@ class Downloadable(Gtk.ListBoxRow):
 
         url = self.url
         format_id = self.this_item_dict["download_format_id"]
-        format_dict = get_format_by_id(format_id, self.info_dict)
+        format_dict = bf.get_format_by_id(format_id, self.info_dict)
         
         # Default dir or selected by the popover button
         downloads_dir = self.selected_download_dir
@@ -423,7 +424,7 @@ class Downloadable(Gtk.ListBoxRow):
         thread.start()
     
     def show_selected_format(self, format_id):
-        hum_readable = human_readable_format(format_id, self.info_dict)
+        hum_readable = bf.human_readable_format(format_id, self.info_dict)
         self.selected_format_label.set_markup("<b>{}</b>".format(hum_readable))
     
     def set_download_dir(self, widget):
@@ -437,103 +438,8 @@ class Downloadable(Gtk.ListBoxRow):
 
 
 
-def h_m_s_time(seconds):
-    """ Convert time from seconds to h:m:s """
-
-    # Some sites seem to provide duration as a float...?
-    duration_total_s = int(seconds)
-    duration_m, duration_s = divmod(duration_total_s, 60)
-    duration_h, duration_m = divmod(duration_m, 60)
-    
-    return (duration_h, duration_m, duration_s)
-
 def separator():
     label = Gtk.Label(" | ")
     label.props.xalign = 0
     return label
-
-def get_format_by_id(format_id, ytdl_info_dict):
-    """
-    Searches given ytdl_info_dict and returns the (first) format dict that
-    has the given format_id
-    """
-    for format_dict in ytdl_info_dict["formats"]:
-        if format_dict["format_id"] == format_id:
-            return format_dict
-        else:
-            pass
-    
-    # if no correct format dict is found:
-    return None
-
-def human_readable_format(format_id, ytdl_info_dict, short=False):
-    """
-    Returns a string containing detailed, human-readable description
-    of the provided Format ID based on the provided ytdl_info_dict.
-    Accepts short=True as an optional argument, mainly for the popover menu.
-    """
-    format_dict = get_format_by_id(format_id, ytdl_info_dict)
-    
-    ext = format_dict["ext"] if "ext" in format_dict else "?"
-
-    if "filesize" in format_dict and format_dict["filesize"] == "none":
-        # let's convert size to MiB
-        filesize = format_dict["filesize"] / 1048576
-    else:
-        filesize = "?"
-    
-    if "vcodec" in format_dict and format_dict["vcodec"] != "none":
-        video = True
-        vcodec = format_dict["vcodec"]
-        
-        if "resolution" in format_dict:
-            resolution = format_dict["resolution"]
-        elif "width" in format_dict and "height" in format_dict:
-            width = format_dict["width"]
-            height = format_dict["height"]
-            resolution = "{}x{}".format(width, height)
-        else:
-            resolution = "?"
-        
-    else:
-        video = False
-    
-    if "acodec" in format_dict and format_dict["acodec"] != "none":
-        audio = True
-        acodec = format_dict["acodec"]
-        abr = format_dict["abr"] if "abr" in format_dict else "?"
-    else:
-        audio = False
-    
-    if video and audio:
-        if short:
-            h_r_format = "{}, {}, {}".format(resolution, vcodec, acodec)
-        else:
-            h_r_format = "{} {}, {}, *.{}".format(
-                resolution, vcodec, acodec, ext
-            )
-    elif video:
-        if short:
-            h_r_format = "{}, {}, *.{}".format(resolution, vcodec, ext)
-        else:
-            h_r_format = "{} {}, *.{}".format(
-                resolution, vcodec, ext
-            )
-    elif audio:
-        if short:
-            h_r_format = "{} kb/s, {}, *.{}".format(abr, acodec, ext)
-        else:
-            h_r_format = "{} kb/s {}, *.{}".format(
-                abr, acodec, ext
-            )
-    # Some websites provide very little information
-    else:
-        fallback_name = format_dict["format"] if "format" in format_dict \
-            else format_dict["format_id"]
-        
-        h_r_format = "{}, {} MiB, *.{}".format(
-            fallback_name, filesize, ext
-        )
-    
-    return h_r_format
 
