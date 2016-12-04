@@ -135,67 +135,6 @@ def is_both_a_v(formats_item):
     else:
         return False
 
-def cmdline_download():
-    """
-    Starts a terminal-based interactive download process including asking
-    for the video adress and format (from a provided list); I'll keep this
-    for now but it's to be removed later as it doesn't serve any real purpose
-    """
-    cmdline_url = input("which video would you like to download? \n> ")
-
-    try:
-        cmdline_info_dict = extract_vid_info(cmdline_url)
-    except youtube_dl.utils.DownloadError:
-        exit("Sorry, this isn't a supported video site:\n{}".format(cmdline_url))
-
-    media_mode_inp = input("[a]udio, [v]ideo or [b]oth? > ")
-
-    if media_mode_inp == 'a' or media_mode_inp == "audio":
-        media_filter_f = get_audio_list
-    elif media_mode_inp == 'v' or media_mode_inp == "video":
-        media_filter_f = get_video_list
-    elif media_mode_inp == 'b' or media_mode_inp == "both":
-        media_filter_f = get_a_v_list
-    else:
-        exit("Error: unrecognized option: {}".format(media_mode_inp))
-
-    possible_downloads_dict = filter(media_filter_f, cmdline_info_dict["formats"])
-
-    print("your download options are:")
-
-    for media_format in possible_downloads_dict:
-        print()
-        print("code: {}".format(media_format["format_id"]))
-        print(media_format["format"])
-        print(media_format["acodec"])
-        print(media_format["vcodec"])
-
-    print()
-    download_choice = input("which code would you be interested in? > ")
-
-    try:
-        download_choice_code = int(download_choice)
-    except:
-        exit("sorry, must be a number")
-
-    download_vid(cmdline_url, download_choice)
-
-# all_audio_formats = filter(get_audio, info_dict["formats"])
-# 
-# print("all audio formats: \n")
-# for filter_result in all_audio_formats:
-#     pprint(filter_result)
-# print("\n")
-
-# for vid_fmt in info_dict["formats"]:
-#     #print("Tady je formát:\n")
-#     print("\n")
-#     pprint(vid_fmt)
-#     print("\n")
-#     print("acodec: {}, ext: {}, format: {}, format_id: {}, vcodec: {}".format(
-#             vid_fmt["acodec"], vid_fmt["ext"], vid_fmt["format"], vid_fmt["format_id"], vid_fmt["vcodec"]
-#         )
-#     )
 
 if __name__ == "__main__":
 
