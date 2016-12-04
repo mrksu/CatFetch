@@ -355,8 +355,6 @@ class Downloadable(Gtk.ListBoxRow):
         in the form of (str: format_id, str: format_name).
         """
 
-        # TODO: Make format names more human-readable and useful
-
         if mode == "av":
             # this one contains downloads with video and audio
             format_store = Gtk.ListStore(str, str)
