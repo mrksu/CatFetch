@@ -4,7 +4,9 @@ from threading import Thread
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gio, GLib
+# Gio isn't used for now; may be later though
+# from gi.repository import Gtk, Gio, GLib
+from gi.repository import Gtk, GLib
 
 import ytdl_wrapper as yw
 import basic_functions as bf
