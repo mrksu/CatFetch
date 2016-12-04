@@ -75,8 +75,9 @@ class MainWindow(Gtk.Window):
 
         # This is a general outer box; it is not useful now but may be later.
         # Also may be deleted if I feel like it.
-        self.outer_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, 
-            spacing=10)
+        self.outer_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=10
+        )
         self.add(self.outer_box)
 
         # Let the main content be scrollable
@@ -162,9 +163,9 @@ class MainWindow(Gtk.Window):
         # for now, let's just ignore the output and treat it as an error.
         if ytdl_info_dict["extractor_key"] == "Generic":
             error_msg = _(''.join(
-                        ["This address may be a direct video link but also ",
-                         "may not. Guessing could lead to bad results. ",
-                         "Better download it using another application."]))
+                ["This address may be a direct video link but also ",
+                 "may not. Guessing could lead to bad results. ",
+                 "Better download it using another application."]))
             GLib.idle_add(self.invalid_url_dialog, url_entered, error_msg)
             self.paste_button.props.sensitive = True
             return
@@ -239,13 +240,15 @@ class MainWindow(Gtk.Window):
         """ Error window if clipboard text isn't a valid video address """
 
         text = ''.join(
-                [_("The address you entered is not downloadable:"),
-                 "\n\n",
-                 "{}\n\n".format(error_msg),
-                 _("Address: \"{}\"".format(url))])
+            [_("The address you entered is not downloadable:"),
+             "\n\n",
+             "{}\n\n".format(error_msg),
+             _("Address: \"{}\"".format(url))])
 
-        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR,
-                 Gtk.ButtonsType.CANCEL, _("Invalid address"))
+        dialog = Gtk.MessageDialog(
+            self, 0, Gtk.MessageType.ERROR,
+            Gtk.ButtonsType.CANCEL, _("Invalid address")
+        )
         dialog.format_secondary_text(text)
         dialog.run()
         dialog.destroy()
@@ -259,10 +262,12 @@ class MainWindow(Gtk.Window):
         A simple filechooser to select the directory where the video file
         should be saved
         """
-        dialog = Gtk.FileChooserDialog(_("Select where to save the file:"), self,
+        dialog = Gtk.FileChooserDialog(
+            _("Select where to save the file:"), self,
             Gtk.FileChooserAction.SELECT_FOLDER,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-            _("Select"), Gtk.ResponseType.OK))
+             _("Select"), Gtk.ResponseType.OK)
+        )
         
         dialog.set_default_size(400, 400)
         
