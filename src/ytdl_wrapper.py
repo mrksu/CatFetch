@@ -98,6 +98,9 @@ def download_vid(url, vid_format, where):
 # info_dict = extract_vid_info("https://www.youtube.com/watch?v=ylzkOPBrdx0")
 
 def is_audio_only(formats_item):
+    """
+    Returns True if the given media format (a dict) is audio-only (no video)
+    """
     # Some websites provide little information; by default evaluate to a/v
     if not "acodec" in formats_item or not "vcodec" in formats_item:
         return False
@@ -107,6 +110,9 @@ def is_audio_only(formats_item):
         return False
 
 def is_video_only(formats_item):
+    """
+    Returns True if the given media format (a dict) is video-only (no audio)
+    """
     # Some websites provide little information; by default evaluate to a/v
     if not "acodec" in formats_item or not "vcodec" in formats_item:
         return False
@@ -116,6 +122,11 @@ def is_video_only(formats_item):
         return False
 
 def is_both_a_v(formats_item):
+    """
+    Returns True if the given media format (a dict) includes both audio
+    and video; this is also True if we can't extract enough information
+    to decide -- it is a sensible default
+    """
     # Some websites provide little information; by default evaluate to a/v
     if not "acodec" in formats_item or not "vcodec" in formats_item:
         return True
@@ -125,6 +136,11 @@ def is_both_a_v(formats_item):
         return False
 
 def cmdline_download():
+    """
+    Starts a terminal-based interactive download process including asking
+    for the video adress and format (from a provided list); I'll keep this
+    for now but it's to be removed later as it doesn't serve any real purpose
+    """
     cmdline_url = input("which video would you like to download? \n> ")
 
     try:

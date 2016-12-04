@@ -424,6 +424,10 @@ class Downloadable(Gtk.ListBoxRow):
         thread.start()
     
     def show_selected_format(self, format_id):
+        """
+        Updates text listing information about the currently selected video
+        format -- self.selected_format_label
+        """
         hum_readable = bf.human_readable_format(format_id, self.info_dict)
         self.selected_format_label.set_markup("<b>{}</b>".format(hum_readable))
     
@@ -439,6 +443,10 @@ class Downloadable(Gtk.ListBoxRow):
 
 
 def separator():
+    """
+    Returns a simple Gtk.Label to be used as a plain text separator between
+    different items in video info
+    """
     label = Gtk.Label(" | ")
     label.props.xalign = 0
     return label
