@@ -6,7 +6,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, GLib
 
-from ytdl_wrapper import *
+import ytdl_wrapper as yw
 import basic_functions as bf
 from basic_functions import _
 
@@ -415,8 +415,8 @@ class Downloadable(Gtk.ListBoxRow):
         where = "{}/{} (fmt {}).{}".format(
             downloads_dir, title, format_id, extension)
 
-        # download_vid(url, format_id, where)
-        thread = Thread(target=download_vid, args=(url, format_id, where,))
+        # yw.download_vid(url, format_id, where)
+        thread = Thread(target=yw.download_vid, args=(url, format_id, where,))
         # making this a daemon so that it stops when closing application window
         thread.daemon = True
         thread.start()

@@ -9,7 +9,7 @@ from gi.repository import Gtk, Gdk, GLib
 
 import youtube_dl
 from basic_functions import _
-from ytdl_wrapper import *
+import ytdl_wrapper as yw
 from downloadables import Downloadable
 
 class MainWindow(Gtk.Window):
@@ -141,7 +141,7 @@ class MainWindow(Gtk.Window):
         url_entered = text
 
         try:
-            ytdl_info_dict = extract_vid_info(url_entered)
+            ytdl_info_dict = yw.extract_vid_info(url_entered)
             # pprint(self.ytdl_info_dict)
         except youtube_dl.utils.DownloadError as ytdl_msg:
             # Slicing off the initial 18 characters from exception here because
@@ -195,9 +195,9 @@ class MainWindow(Gtk.Window):
         formats_list = ytdl_info_dict["formats"]
         
         # Build lists containing audio-only, video-only and a/v format options
-        available_a_v_s = [av for av in formats_list if is_both_a_v(av)]
-        available_video_s = [v for v in formats_list if is_video_only(v)]
-        available_audio_s = [a for a in formats_list if is_audio_only(a)]
+        available_a_v_s = [av for av in formats_list if yw.is_both_a_v(av)]
+        available_video_s = [v for v in formats_list if yw.is_video_only(v)]
+        available_audio_s = [a for a in formats_list if yw.is_audio_only(a)]
 
         self.items_list.append({
             "url": url,
