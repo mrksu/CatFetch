@@ -14,6 +14,12 @@ import youtube_dl
 
 
 class MyLogger(object):
+    """
+    Used by YoutubeDL to pass various information into. There are three types
+    of messages: debug (most common, just tells what YoutubeDL is doing ATM),
+    warning and error. For now, we just print them to the stdout.
+    """
+    # TODO: Find a more meaningful way to handle log messages
     def debug(self, msg):
         print("YDL DEBUG: {}".format(msg))
 
@@ -25,6 +31,10 @@ class MyLogger(object):
 
 
 def my_hook(hook_dict):
+    """
+    Actions to be launched on various YoutubeDL events can be specified here
+    """
+    # TODO: Find a more meaningful use for the events
     if hook_dict['status'] == 'finished':
         print('my_hook: finished')
         print("filename: {}".format(hook_dict["filename"]))
@@ -53,8 +63,12 @@ def my_hook(hook_dict):
 # with youtube_dl.YoutubeDL(ydl_opts) as ydl:
 #     ydl.download(['http://www.youtube.com/watch?v=BaW_jenozKc'])
 
-# *extracts* formats info:
+
 def extract_vid_info(url):
+    """
+    Lets YoutubeDL check out the given address and returns an 'info dict'
+    containing all data we can get about the video
+    """
     info_ydl_opts = {
         "logger": MyLogger(),
         "progress_hooks": [my_hook],
@@ -74,7 +88,10 @@ def extract_vid_info(url):
     return info_dict
 
 def pprint_info_dict(url):
-
+    """
+    Pretty-prints extracted information about the given (video) address
+    to the terminal stdout
+    """
     try:
         info_dict = extract_vid_info(url)
     except youtube_dl.utils.DownloadError:
@@ -83,6 +100,10 @@ def pprint_info_dict(url):
     pprint(info_dict)
 
 def download_vid(url, vid_format, where):
+    """
+    Orders YoutubeDL to start downloading the video from an address ('url')
+    and in a format specified by id ('vid_format') into location ('where')
+    """
     dow_ydl_opts = {
         "logger": MyLogger(),
         "progress_hooks": [my_hook],
