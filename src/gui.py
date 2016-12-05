@@ -17,7 +17,7 @@ class MainWindow(Gtk.Window):
     Main application window; contains a ListBox showing videos to be downloaded,
     a 'Paste from Clipboard' button and a 'Download All' button.
     """
-    
+
     def __init__(self):
         Gtk.Window.__init__(self, title=_("Video Downloader"))
 
@@ -147,7 +147,7 @@ class MainWindow(Gtk.Window):
         except youtube_dl.utils.DownloadError as ytdl_msg:
             # Slicing off the initial 18 characters from exception here because
             # the messages's beginning is just a general 'ERROR' text
-            # with red-color formatting which doesn't translate nicely 
+            # with red-color formatting which doesn't translate nicely
             # into non-terminal output anyway.
             error_msg = "{}".format(ytdl_msg)[18:]
             # Show an error dialog
@@ -174,17 +174,17 @@ class MainWindow(Gtk.Window):
         # The retrieved information can contain a single video or a playlist.
         # If it's a playlist, add all contained videos:
         if "_type" in ytdl_info_dict and ytdl_info_dict["_type"] == "playlist":
-            
+
             for each_entry_dict in ytdl_info_dict["entries"]:
                 self.add_new_video(each_entry_dict)
-        
+
         # If it's just a regular video, add it:
         else:
             self.add_new_video(ytdl_info_dict)
 
         self.download_button.props.sensitive = True
         self.paste_button.props.sensitive = True
-    
+
     def add_new_video(self, ytdl_info_dict):
         """
         Adds extracted video info to the global list. Then proceeds with
@@ -192,9 +192,9 @@ class MainWindow(Gtk.Window):
         the current video.
         """
         url = ytdl_info_dict["webpage_url"]
-        
+
         formats_list = ytdl_info_dict["formats"]
-        
+
         # Build lists containing audio-only, video-only and a/v format options
         available_a_v_s = [av for av in formats_list if yw.is_both_a_v(av)]
         available_video_s = [v for v in formats_list if yw.is_video_only(v)]
@@ -252,11 +252,11 @@ class MainWindow(Gtk.Window):
         dialog.format_secondary_text(text)
         dialog.run()
         dialog.destroy()
-    
+
     def clear_vid_list(self):
         """ Placeholder; see self.clear_button """
         print("cleared")
-    
+
     def dir_chooser(self, listbox_row):
         """
         A simple filechooser to select the directory where the video file
@@ -268,18 +268,18 @@ class MainWindow(Gtk.Window):
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              _("Select"), Gtk.ResponseType.OK)
         )
-        
+
         dialog.set_default_size(400, 400)
-        
+
         response = dialog.run()
-        
+
         if response == Gtk.ResponseType.OK:
             location = dialog.get_filename()
             listbox_row.selected_download_dir = location
         else:
             # Cancel clicked
             pass
-        
+
         dialog.destroy()
 
 

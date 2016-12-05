@@ -11,7 +11,7 @@ def h_m_s_time(seconds):
     duration_total_s = int(seconds)
     duration_m, duration_s = divmod(duration_total_s, 60)
     duration_h, duration_m = divmod(duration_m, 60)
-    
+
     return (duration_h, duration_m, duration_s)
 
 def get_format_by_id(format_id, ytdl_info_dict):
@@ -24,7 +24,7 @@ def get_format_by_id(format_id, ytdl_info_dict):
             return format_dict
         else:
             pass
-    
+
     # if no correct format dict is found:
     return None
 
@@ -35,7 +35,7 @@ def human_readable_format(format_id, ytdl_info_dict, short=False):
     Accepts short=True as an optional argument, mainly for the popover menu.
     """
     format_dict = get_format_by_id(format_id, ytdl_info_dict)
-    
+
     ext = format_dict["ext"] if "ext" in format_dict else "?"
 
     if "filesize" in format_dict and format_dict["filesize"] == "none":
@@ -43,11 +43,11 @@ def human_readable_format(format_id, ytdl_info_dict, short=False):
         filesize = format_dict["filesize"] / 1048576
     else:
         filesize = "?"
-    
+
     if "vcodec" in format_dict and format_dict["vcodec"] != "none":
         video = True
         vcodec = format_dict["vcodec"]
-        
+
         if "resolution" in format_dict:
             resolution = format_dict["resolution"]
         elif "width" in format_dict and "height" in format_dict:
@@ -56,17 +56,17 @@ def human_readable_format(format_id, ytdl_info_dict, short=False):
             resolution = "{}x{}".format(width, height)
         else:
             resolution = "?"
-        
+
     else:
         video = False
-    
+
     if "acodec" in format_dict and format_dict["acodec"] != "none":
         audio = True
         acodec = format_dict["acodec"]
         abr = format_dict["abr"] if "abr" in format_dict else "?"
     else:
         audio = False
-    
+
     if video and audio:
         if short:
             h_r_format = "{}, {}, {}".format(resolution, vcodec, acodec)
@@ -92,10 +92,10 @@ def human_readable_format(format_id, ytdl_info_dict, short=False):
     else:
         fallback_name = format_dict["format"] if "format" in format_dict \
             else format_dict["format_id"]
-        
+
         h_r_format = "{}, {} MiB, *.{}".format(
             fallback_name, filesize, ext
         )
-    
+
     return h_r_format
 

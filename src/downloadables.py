@@ -26,7 +26,7 @@ class Downloadable(Gtk.ListBoxRow):
         self.this_item_dict = this_item_dict
         self.url = this_item_dict["url"]
         self.info_dict = this_item_dict["ytdl_info_dict"]
-        
+
         # Directory where videos are saved. For now the user's Downloads dir.
         # TODO: Make the directory cinfigurable
         self.default_download_dir = \
@@ -60,10 +60,10 @@ class Downloadable(Gtk.ListBoxRow):
         self.video_title_label.props.ellipsize = 3
         # align text to the left
         self.video_title_label.props.xalign = 0
-        
+
         self.info_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.info_widget.pack_start(self.video_title_label, 1, 0, 0)
-        
+
         # This box contains various video info and is horizontally aligned
         self.video_details_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
@@ -78,27 +78,27 @@ class Downloadable(Gtk.ListBoxRow):
             )
         else:
             self.video_duration_label = Gtk.Label("--:--:--")
-        
+
         # align text to the left
         self.video_duration_label.props.xalign = 0
 
         self.video_details_box.pack_start(self.video_duration_label, 0, 0, 0)
-        
+
         # separator: a label containing just " | "
         self.video_details_box.pack_start(separator(), 0, 0, 0)
-        
+
         # label displaying the website hosting the video
         if "extractor_key" in self.info_dict:
             video_hosting = self.info_dict["extractor_key"]
         # not sure if all websites provide the more readable extractor_key
         else:
             video_hosting = self.info_dict["extractor"]
-        
+
         video_hosting_label = Gtk.Label(video_hosting)
         video_hosting_label.props.xalign = 0
         self.video_details_box.pack_start(video_hosting_label, 0, 0, 0)
         self.video_details_box.pack_start(separator(), 0, 0, 0)
-        
+
         # label showing currently selected video format; empty by default:
         # will be filled in by the self.show_selected_format function
         self.selected_format_label = Gtk.Label("-")
@@ -108,7 +108,7 @@ class Downloadable(Gtk.ListBoxRow):
         self.video_details_box.pack_start(self.selected_format_label, 0, 0, 0)
 
         self.info_widget.pack_start(self.video_details_box, 0, 0, 0)
-        
+
         self.hbox.pack_start(self.info_widget, 1, 1, 0)
 
         # and now a ComboBox for format selection
@@ -176,7 +176,7 @@ class Downloadable(Gtk.ListBoxRow):
         # this means the first item (Video and audio) will be pre-selected
         self.mode_selection.props.active = 0
         # self.av_selection_box.pack_start(self.mode_selection, 0, 0, 0)
-        
+
         # If there are only a/v formats available, disable the dropdown
         # TODO: Do this more pleasantly, also avoiding creation of stores
         if len(self.this_item_dict["available_audio_s"]) == 0 \
@@ -215,14 +215,14 @@ class Downloadable(Gtk.ListBoxRow):
         # a Gtk.Box Popover
         pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         pop_box.props.margin = 10
-        
+
         pop_mode_label = Gtk.Label(_("Mode:"))
         pop_mode_label.props.xalign = 0
         pop_format_label = Gtk.Label(_("Format:"))
         pop_format_label.props.xalign = 0
         pop_destination_label = Gtk.Label(_("Where to save:"))
         pop_destination_label.props.xalign = 0
-        
+
         # Button used to open the filechooser (dir_chooser)
         self.destination_button = Gtk.Button()
         self.destination_button.connect("clicked", self.set_download_dir)
@@ -236,14 +236,14 @@ class Downloadable(Gtk.ListBoxRow):
         # are so 25 seems reasonable
         self.destination_label.props.max_width_chars = 25
         self.destination_button.add(self.destination_label)
-        
+
         pop_box.pack_start(pop_mode_label, 0, 0, 0)
         pop_box.pack_start(self.mode_selection, 0, 0, 0)
         pop_box.pack_start(pop_format_label, 0, 0, 0)
         pop_box.pack_start(self.format_selection, 0, 0, 0)
         pop_box.pack_start(pop_destination_label, 0, 0, 0)
         pop_box.pack_start(self.destination_button, 0, 0, 0)
-        
+
         # ...from a button
         pop_button = Gtk.MenuButton()
         # Possible icons: document-properties, applications-system
@@ -406,10 +406,10 @@ class Downloadable(Gtk.ListBoxRow):
         url = self.url
         format_id = self.this_item_dict["download_format_id"]
         format_dict = bf.get_format_by_id(format_id, self.info_dict)
-        
+
         # Default dir or selected by the popover button
         downloads_dir = self.selected_download_dir
-        
+
         title = self.info_dict["title"]
         extension = format_dict["ext"]
 
@@ -422,7 +422,7 @@ class Downloadable(Gtk.ListBoxRow):
         # making this a daemon so that it stops when closing application window
         thread.daemon = True
         thread.start()
-    
+
     def show_selected_format(self, format_id):
         """
         Updates text listing information about the currently selected video
@@ -430,7 +430,7 @@ class Downloadable(Gtk.ListBoxRow):
         """
         hum_readable = bf.human_readable_format(format_id, self.info_dict)
         self.selected_format_label.set_markup("<b>{}</b>".format(hum_readable))
-    
+
     def set_download_dir(self, widget):
         """
         Runs the filechooser and updates the self.selected_download_dir variable
