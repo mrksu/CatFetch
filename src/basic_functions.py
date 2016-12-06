@@ -99,3 +99,41 @@ def human_readable_format(format_id, ytdl_info_dict, short=False):
 
     return h_r_format
 
+def is_audio_only(formats_item):
+    """
+    Returns True if the given media format (a dict) is audio-only (no video)
+    """
+    # Some websites provide little information; by default evaluate to a/v
+    if not "acodec" in formats_item or not "vcodec" in formats_item:
+        return False
+    elif formats_item["acodec"] != "none" and formats_item["vcodec"] == "none":
+        return True
+    else:
+        return False
+
+def is_video_only(formats_item):
+    """
+    Returns True if the given media format (a dict) is video-only (no audio)
+    """
+    # Some websites provide little information; by default evaluate to a/v
+    if not "acodec" in formats_item or not "vcodec" in formats_item:
+        return False
+    elif formats_item["acodec"] == "none" and formats_item["vcodec"] != "none":
+        return True
+    else:
+        return False
+
+def is_both_a_v(formats_item):
+    """
+    Returns True if the given media format (a dict) includes both audio
+    and video; this is also True if we can't extract enough information
+    to decide -- it is a sensible default
+    """
+    # Some websites provide little information; by default evaluate to a/v
+    if not "acodec" in formats_item or not "vcodec" in formats_item:
+        return True
+    elif formats_item["acodec"] != "none" and formats_item["vcodec"] != "none":
+        return True
+    else:
+        return False
+

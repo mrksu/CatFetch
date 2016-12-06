@@ -8,6 +8,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GLib
 
 import youtube_dl
+import basic_functions as bf
 from basic_functions import _
 import ytdl_wrapper as yw
 from downloadables import Downloadable
@@ -196,9 +197,9 @@ class MainWindow(Gtk.Window):
         formats_list = ytdl_info_dict["formats"]
 
         # Build lists containing audio-only, video-only and a/v format options
-        available_a_v_s = [av for av in formats_list if yw.is_both_a_v(av)]
-        available_video_s = [v for v in formats_list if yw.is_video_only(v)]
-        available_audio_s = [a for a in formats_list if yw.is_audio_only(a)]
+        available_a_v_s = [av for av in formats_list if bf.is_both_a_v(av)]
+        available_video_s = [v for v in formats_list if bf.is_video_only(v)]
+        available_audio_s = [a for a in formats_list if bf.is_audio_only(a)]
 
         self.items_list.append({
             "url": url,
