@@ -48,8 +48,9 @@ class MainWindow(Gtk.Window):
         # The Paste button
         self.paste_button = Gtk.Button(_("Paste"))
         self.paste_button.connect("clicked", self.url_pasted)
-        self.paste_button.props.tooltip_text = \
+        self.paste_button.set_tooltip_text(
             _("Paste video address from the clipboard")
+        )
         self.headerbar.pack_start(self.paste_button)
 
         # The Download button
@@ -58,8 +59,9 @@ class MainWindow(Gtk.Window):
             "document-save-symbolic", Gtk.IconSize.BUTTON)
         self.download_button.connect("clicked", self.launch_download)
         self.download_button.props.sensitive = False
-        self.download_button.props.tooltip_text = \
+        self.download_button.set_tooltip_text(
             _("Download all waiting videos")
+        )
         self.headerbar.pack_end(self.download_button)
 
         # Button for clearing the videos list
@@ -69,8 +71,9 @@ class MainWindow(Gtk.Window):
         self.clear_button = Gtk.Button.new_from_icon_name(
             "user-trash-symbolic", Gtk.IconSize.BUTTON)
         self.clear_button.connect("clicked", self.clear_vid_list)
-        self.clear_button.props.tooltip_text = \
+        self.clear_button.set_tooltip_text(
             _("Clear the list")
+        )
         self.clear_button.props.sensitive = False
         self.headerbar.pack_end(self.clear_button)
 
@@ -98,8 +101,9 @@ class MainWindow(Gtk.Window):
         self.downloadables_listbox = Gtk.ListBox()
         self.downloadables_listbox.set_placeholder(listbox_placeholder)
         # Make rows non-selectable
-        self.downloadables_listbox.props.selection_mode = \
+        self.downloadables_listbox.set_selection_mode(
             Gtk.SelectionMode.NONE
+        )
         self.scroll_envelope.add(self.downloadables_listbox)
 
 

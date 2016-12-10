@@ -200,8 +200,9 @@ class Downloadable(Gtk.ListBoxRow):
         self.download_item_button = Gtk.Button.new_from_icon_name(
             "document-save-symbolic", Gtk.IconSize.BUTTON)
         self.download_item_button.connect("clicked", self.download_item)
-        self.download_item_button.props.tooltip_text = \
+        self.download_item_button.set_tooltip_text(
             _("Download this video")
+        )
         self.status_box.pack_start(self.download_item_button, 1, 1, 0)
 
         # # Button combining download and format
@@ -249,9 +250,9 @@ class Downloadable(Gtk.ListBoxRow):
         pop_icon = Gtk.Image.new_from_icon_name(
             "document-properties-symbolic", Gtk.IconSize.BUTTON)
         pop_button.add(pop_icon)
-        pop_button.props.tooltip_text = \
+        pop_button.set_tooltip_text(
             _("Select video and audio format to download")
-
+        )
         popover = Gtk.Popover.new(pop_button)
         popover.add(pop_box)
         pop_button.set_popover(popover)
