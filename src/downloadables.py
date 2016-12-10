@@ -25,7 +25,7 @@ class Downloadable(Gtk.ListBoxRow):
         self.main_window = main_window
         self.this_item_dict = this_item_dict
         self.url = this_item_dict["url"]
-        self.info_dict = this_item_dict["ytdl_info_dict"]
+        self.ytdl_info_dict = this_item_dict["ytdl_info_dict"]
 
         # Directory where videos are saved. For now the user's Downloads dir.
         # TODO: Make the directory configurable
@@ -53,7 +53,7 @@ class Downloadable(Gtk.ListBoxRow):
         # Video title as a label
         # "size='large'" could also be added
         self.video_title_label.set_markup(
-            "<span weight='bold'>{}</span>".format(self.info_dict["title"])
+            "<span weight='bold'>{}</span>".format(self.ytdl_info_dict["title"])
         )
         # ellipsize characters at the end
         self.video_title_label.props.ellipsize = 3
@@ -67,9 +67,9 @@ class Downloadable(Gtk.ListBoxRow):
         self.video_details_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 
         # For some videos, time cannot be extracted
-        if "duration" in self.info_dict:
+        if "duration" in self.ytdl_info_dict:
             # Convert time from seconds to h:m:s
-            dur_h, dur_m, dur_s = bf.h_m_s_time(self.info_dict["duration"])
+            dur_h, dur_m, dur_s = bf.h_m_s_time(self.ytdl_info_dict["duration"])
 
             self.video_duration_label = Gtk.Label(
                 # {:02d} means numbers are 2 digits long and padded with 0s if nec.
@@ -87,11 +87,11 @@ class Downloadable(Gtk.ListBoxRow):
         self.video_details_box.pack_start(separator(), 0, 0, 0)
 
         # label displaying the website hosting the video
-        if "extractor_key" in self.info_dict:
-            video_hosting = self.info_dict["extractor_key"]
+        if "extractor_key" in self.ytdl_info_dict:
+            video_hosting = self.ytdl_info_dict["extractor_key"]
         # not sure if all websites provide the more readable extractor_key
         else:
-            video_hosting = self.info_dict["extractor"]
+            video_hosting = self.ytdl_info_dict["extractor"]
 
         video_hosting_label = Gtk.Label(video_hosting)
         video_hosting_label.props.xalign = 0
@@ -364,7 +364,7 @@ class Downloadable(Gtk.ListBoxRow):
             for av_format in self.this_item_dict["available_a_v_s"]:
                 format_id = av_format["format_id"]
                 format_name = bf.human_readable_format(
-                    format_id, self.info_dict, short=True
+                    format_id, self.ytdl_info_dict, short=True
                 )
                 format_store.append([format_id, format_name])
 
@@ -375,7 +375,7 @@ class Downloadable(Gtk.ListBoxRow):
             for video_format in self.this_item_dict["available_video_s"]:
                 format_id = video_format["format_id"]
                 format_name = bf.human_readable_format(
-                    format_id, self.info_dict, short=True
+                    format_id, self.ytdl_info_dict, short=True
                 )
                 format_store.append([format_id, format_name])
 
@@ -386,7 +386,7 @@ class Downloadable(Gtk.ListBoxRow):
             for audio_format in self.this_item_dict["available_audio_s"]:
                 format_id = audio_format["format_id"]
                 format_name = bf.human_readable_format(
-                    format_id, self.info_dict, short=True
+                    format_id, self.ytdl_info_dict, short=True
                 )
                 format_store.append([format_id, format_name])
 
@@ -405,12 +405,12 @@ class Downloadable(Gtk.ListBoxRow):
 
         url = self.url
         format_id = self.this_item_dict["download_format_id"]
-        format_dict = bf.get_format_by_id(format_id, self.info_dict)
+        format_dict = bf.get_format_by_id(format_id, self.ytdl_info_dict)
 
         # Default dir or selected by the popover button
         downloads_dir = self.selected_download_dir
 
-        title = self.info_dict["title"]
+        title = self.ytdl_info_dict["title"]
         extension = format_dict["ext"]
 
         # This is where we create the actual download path and filename
@@ -428,7 +428,7 @@ class Downloadable(Gtk.ListBoxRow):
         Updates text listing information about the currently selected video
         format -- self.selected_format_label
         """
-        hum_readable = bf.human_readable_format(format_id, self.info_dict)
+        hum_readable = bf.human_readable_format(format_id, self.ytdl_info_dict)
         self.selected_format_label.set_markup("<b>{}</b>".format(hum_readable))
 
     def set_download_dir(self, widget):
