@@ -49,7 +49,6 @@ class Downloadable(Gtk.ListBoxRow):
         self.cover_box.add(self.cover_placeholder)
 
         # middle part of the row; contains video info
-        # TODO: nicer info
         self.video_title_label = Gtk.Label()
         # Video title as a label
         # "size='large'" could also be added
