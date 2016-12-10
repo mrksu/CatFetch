@@ -6,7 +6,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 # Gio isn't used for now; may be later though
 # from gi.repository import Gtk, Gio, GLib
-from gi.repository import Gtk, GLib
+from gi.repository import Gtk
 
 import ytdl_wrapper as yw
 import basic_functions as bf
@@ -28,9 +28,7 @@ class Downloadable(Gtk.ListBoxRow):
         self.ytdl_info_dict = this_item_dict["ytdl_info_dict"]
 
         # Directory where videos are saved. For now the user's Downloads dir.
-        # TODO: Make the directory configurable
-        self.default_download_dir = \
-            GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
+        self.default_download_dir = self.this_item_dict["default_download_dir"]
         self.selected_download_dir = self.default_download_dir
 
         # a horizontal box containing all else in this row

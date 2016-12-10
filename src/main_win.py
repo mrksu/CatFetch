@@ -205,12 +205,17 @@ class MainWindow(Gtk.Window):
         available_video_s = [v for v in formats_list if bf.is_video_only(v)]
         available_audio_s = [a for a in formats_list if bf.is_audio_only(a)]
 
+        # Provide a default download location; the 'Downloads' dir. for now
+        # TODO: Possibly make the default configurable in Preferences
+        downl_dir = GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
+
         self.items_list.append({
             "url": url,
             "ytdl_info_dict": ytdl_info_dict,
             "available_a_v_s": available_a_v_s,
             "available_video_s": available_video_s,
             "available_audio_s": available_audio_s,
+            "default_download_dir": downl_dir,
             "status": "waiting"
         })
 
