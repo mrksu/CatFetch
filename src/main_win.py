@@ -274,8 +274,6 @@ class MainWindow(Gtk.Window):
              _("Select"), Gtk.ResponseType.OK)
         )
 
-        dialog.set_default_size(400, 400)
-
         response = dialog.run()
 
         if response == Gtk.ResponseType.OK:
