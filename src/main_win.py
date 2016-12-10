@@ -53,6 +53,10 @@ class MainWindow(Gtk.Window):
         )
         self.headerbar.pack_start(self.paste_button)
 
+        # A spinner showing progress when an address is pasted
+        self.spinner = Gtk.Spinner()
+        self.headerbar.pack_start(self.spinner)
+
         # The Download button
         # possible icons: document-save, go-down, emblem-downloads
         self.download_button = Gtk.Button.new_from_icon_name(
@@ -121,7 +125,9 @@ class MainWindow(Gtk.Window):
         to the 'self.url_evaluate' function.
         """
 
+        # Deactivate the 'Paste' button and start spinner animation
         self.paste_button.props.sensitive = False
+        self.spinner.start()
 
         text = self.clipboard.wait_for_text()
 
@@ -131,8 +137,10 @@ class MainWindow(Gtk.Window):
             thread.daemon = True
             thread.start()
         else:
+            # TODO: Display an error window instead
             print(_("No text in the clipboard!"))
             self.paste_button.props.sensitive = True
+            self.spinner.stop()
 
     def url_evaluate(self, text):
         """
@@ -157,8 +165,9 @@ class MainWindow(Gtk.Window):
             error_msg = "{}".format(ytdl_msg)[18:]
             # Show an error dialog
             GLib.idle_add(self.invalid_url_dialog, url_entered, error_msg)
-            # Make Paste button sensitive
+            # Make Paste button sensitive and stop spinner animation
             self.paste_button.props.sensitive = True
+            self.spinner.stop()
             return
 
         # youtube_dl falls back on 'Generic' extractor if the website
@@ -173,6 +182,7 @@ class MainWindow(Gtk.Window):
                  "Better download it using another application."]))
             GLib.idle_add(self.invalid_url_dialog, url_entered, error_msg)
             self.paste_button.props.sensitive = True
+            self.spinner.stop()
             return
 
         # Register the extracted information globally
@@ -189,6 +199,7 @@ class MainWindow(Gtk.Window):
 
         self.download_button.props.sensitive = True
         self.paste_button.props.sensitive = True
+        self.spinner.stop()
 
     def add_new_video(self, ytdl_info_dict):
         """
