@@ -95,7 +95,7 @@ class MainWindow(Gtk.Window):
         # a placeholder if there aren't any videos to show
         # TODO: find out why this doesn't work or find a different way
         listbox_placeholder = Gtk.Label(
-            _("Paste videos from the clipboard using the 'Paste' button"))
+            _("Paste videos from the clipboard using the ‘Paste’ button"))
 
         # a ListBox containing added videos to be downloaded
         self.downloadables_listbox = Gtk.ListBox()
@@ -248,7 +248,7 @@ class MainWindow(Gtk.Window):
             [_("The address you entered is not downloadable:"),
              "\n\n",
              "{}\n\n".format(error_msg),
-             _("Address: \"{}\"".format(url))])
+             _("Address: “{}”".format(url))])
 
         dialog = Gtk.MessageDialog(
             self, 0, Gtk.MessageType.ERROR,
