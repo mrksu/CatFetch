@@ -43,25 +43,25 @@ class Downloadable(Gtk.ListBoxRow):
         # TODO: cover picture
         self.cover_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
         self.hbox.pack_start(self.cover_box, 0, 0, 5)
-        self.cover_placeholder = Gtk.Label("cover")
-        self.cover_placeholder.props.xalign = 0.5
-        self.cover_placeholder.props.yalign = 0.5
-        self.cover_box.add(self.cover_placeholder)
+        cover_placeholder = Gtk.Label("cover")
+        cover_placeholder.props.xalign = 0.5
+        cover_placeholder.props.yalign = 0.5
+        self.cover_box.add(cover_placeholder)
 
         # middle part of the row; contains video info
-        self.video_title_label = Gtk.Label()
+        video_title_label = Gtk.Label()
         # Video title as a label
         # "size='large'" could also be added
-        self.video_title_label.set_markup(
+        video_title_label.set_markup(
             "<span weight='bold'>{}</span>".format(self.ytdl_info_dict["title"])
         )
         # ellipsize characters at the end
-        self.video_title_label.props.ellipsize = 3
+        video_title_label.props.ellipsize = 3
         # align text to the left
-        self.video_title_label.props.xalign = 0
+        video_title_label.props.xalign = 0
 
         self.info_widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        self.info_widget.pack_start(self.video_title_label, 1, 0, 0)
+        self.info_widget.pack_start(video_title_label, 1, 0, 0)
 
         # This box contains various video info and is horizontally aligned
         self.video_details_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -71,17 +71,17 @@ class Downloadable(Gtk.ListBoxRow):
             # Convert time from seconds to h:m:s
             dur_h, dur_m, dur_s = bf.h_m_s_time(self.ytdl_info_dict["duration"])
 
-            self.video_duration_label = Gtk.Label(
+            video_duration_label = Gtk.Label(
                 # {:02d} means numbers are 2 digits long and padded with 0s if nec.
                 "{}:{:02d}:{:02d}".format(dur_h, dur_m, dur_s)
             )
         else:
-            self.video_duration_label = Gtk.Label("--:--:--")
+            video_duration_label = Gtk.Label("--:--:--")
 
         # align text to the left
-        self.video_duration_label.props.xalign = 0
+        video_duration_label.props.xalign = 0
 
-        self.video_details_box.pack_start(self.video_duration_label, 0, 0, 0)
+        self.video_details_box.pack_start(video_duration_label, 0, 0, 0)
 
         # separator: a label containing just " | "
         self.video_details_box.pack_start(separator(), 0, 0, 0)
