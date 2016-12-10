@@ -28,7 +28,7 @@ class Downloadable(Gtk.ListBoxRow):
         self.info_dict = this_item_dict["ytdl_info_dict"]
 
         # Directory where videos are saved. For now the user's Downloads dir.
-        # TODO: Make the directory cinfigurable
+        # TODO: Make the directory configurable
         self.default_download_dir = \
             GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
         self.selected_download_dir = self.default_download_dir
