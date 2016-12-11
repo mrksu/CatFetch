@@ -246,16 +246,16 @@ class MainWindow(Gtk.Window):
         self.downloadables_listbox.add(listbox_row)
         self.downloadables_listbox.show_all()
 
-    def downloadables_refresh(self, items_list):
-        self.outer_box.remove(self.downloadables_listbox)
-        self.downloadables_listbox = Gtk.ListBox()
+    # def downloadables_refresh(self, items_list):
+    #     self.outer_box.remove(self.downloadables_listbox)
+    #     self.downloadables_listbox = Gtk.ListBox()
 
-        for item in items_list:
-            pprint(item["listbox_row"])
-            self.downloadables_listbox.add(item.get("listbox_row"))
+    #     for item in items_list:
+    #         pprint(item["listbox_row"])
+    #         self.downloadables_listbox.add(item.get("listbox_row"))
 
-        self.outer_box.add(self.downloadables_listbox)
-        self.downloadables_listbox.show_all()
+    #     self.outer_box.add(self.downloadables_listbox)
+    #     self.downloadables_listbox.show_all()
 
     def invalid_url_dialog(self, url, error_msg):
         """ Error window if clipboard text isn't a valid video address """
