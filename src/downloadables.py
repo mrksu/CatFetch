@@ -396,7 +396,7 @@ class Downloadable(Gtk.ListBoxRow):
     def remove_item(self, widget):
         row_widget = self.this_item_dict["listbox_row"]
         self.main_window.downloadables_listbox.remove(row_widget)
-        del self.main_window.items_list[self.url]
+        del self.main_window.central_item_dict[self.url]
 
     def download_item(self, widget):
         """
