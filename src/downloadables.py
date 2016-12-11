@@ -394,6 +394,10 @@ class Downloadable(Gtk.ListBoxRow):
         return format_store
 
     def remove_item(self, widget):
+        """
+        Deletes the current video/item from both the main ListBox (removes
+        this row) and the central_item_dict (deletes this dict item)
+        """
         row_widget = self.this_item_dict["listbox_row"]
         self.main_window.downloadables_listbox.remove(row_widget)
         del self.main_window.central_item_dict[self.url]
