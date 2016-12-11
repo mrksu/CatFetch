@@ -22,17 +22,18 @@ class MainWindow(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title=_("Video Downloader"))
 
-        # a list containing one dictionary per video entered by the user
+        # a central dictionary containing one dictionary per video entered
+        # by the user, identified by its address;
         # structure:
-        # [
-        #  {
-        #   "url":              "https://...",
-        #   "ytdl_info_dict":   <dict>,
-        #   "listbox_row":      a <ListBoxRow> instance,
-        #   "status":           "waiting" or "downloaded" or "downloading"
-        #  }
-        # ]
-        self.items_list = []
+        # {
+        #   "https://video-address.net/example":
+        #     {
+        #       "ytdl_info_dict":   <dict>,
+        #       "listbox_row":      a <ListBoxRow> instance,
+        #       "status":           "waiting" or "downloaded" or "downloading"
+        #     }
+        # }
+        self.central_item_dict = {}
 
         # For pasting video address
         self.clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
@@ -116,8 +117,8 @@ class MainWindow(Gtk.Window):
 
         # Simply execute the download method of each row instance
         # This is already threaded
-        for item in self.items_list:
-            item["listbox_row"].download_item(widget)
+        for item in self.central_item_dict:
+            self.central_item_dict[item]["listbox_row"].download_item(widget)
 
     def url_pasted(self, widget):
         """
@@ -145,7 +146,7 @@ class MainWindow(Gtk.Window):
     def url_evaluate(self, text):
         """
         Checks if the text if a valid youtube_dl video address and if so,
-        extracts info from it to the 'self.items_list' list of dicts
+        extracts info from it to the 'self.central_item_dict' dict of dicts
         and launches further functions for adding the video.
         """
 
@@ -199,6 +200,7 @@ class MainWindow(Gtk.Window):
 
         self.download_button.props.sensitive = True
         self.paste_button.props.sensitive = True
+        self.clear_button.props.sensitive = True
         self.spinner.stop()
 
     def add_new_video(self, ytdl_info_dict):
@@ -208,6 +210,11 @@ class MainWindow(Gtk.Window):
         the current video.
         """
         url = ytdl_info_dict["webpage_url"]
+
+        if url in self.central_item_dict:
+            # TODO: Change this into a regular error window
+            print("This video is already in the list")
+            return
 
         formats_list = ytdl_info_dict["formats"]
 
@@ -220,19 +227,18 @@ class MainWindow(Gtk.Window):
         # TODO: Possibly make the default configurable in Preferences
         downl_dir = GLib.get_user_special_dir(GLib.USER_DIRECTORY_DOWNLOAD)
 
-        self.items_list.append({
-            "url": url,
+        self.central_item_dict[url] = {
             "ytdl_info_dict": ytdl_info_dict,
             "available_a_v_s": available_a_v_s,
             "available_video_s": available_video_s,
             "available_audio_s": available_audio_s,
             "default_download_dir": downl_dir,
             "status": "waiting"
-        })
+        }
 
         # Add a new row to the videos list
         # This must be done in a GTK-specific threading way
-        GLib.idle_add(self.add_listbox_row, self.items_list[-1])
+        GLib.idle_add(self.add_listbox_row, self.central_item_dict[url])
 
     def add_listbox_row(self, downloadable_item_dict):
         """
@@ -274,9 +280,13 @@ class MainWindow(Gtk.Window):
         dialog.run()
         dialog.destroy()
 
-    def clear_vid_list(self):
-        """ Placeholder; see self.clear_button """
-        print("cleared")
+    def clear_vid_list(self, widget):
+        """ Executes each row's remove function to clear the list """
+        for item in self.central_item_dict:
+            row = self.central_item_dict[item]["listbox_row"]
+            self.downloadables_listbox.remove(row)
+
+        self.central_item_dict = {}
 
     def dir_chooser(self, listbox_row):
         """

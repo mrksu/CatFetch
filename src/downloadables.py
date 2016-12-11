@@ -24,8 +24,8 @@ class Downloadable(Gtk.ListBoxRow):
 
         self.main_window = main_window
         self.this_item_dict = this_item_dict
-        self.url = this_item_dict["url"]
         self.ytdl_info_dict = this_item_dict["ytdl_info_dict"]
+        self.url = self.ytdl_info_dict["webpage_url"]
 
         # Directory where videos are saved. For now the user's Downloads dir.
         self.default_download_dir = self.this_item_dict["default_download_dir"]
@@ -392,6 +392,11 @@ class Downloadable(Gtk.ListBoxRow):
             return None
 
         return format_store
+
+    def remove_item(self, widget):
+        row_widget = self.this_item_dict["listbox_row"]
+        self.main_window.downloadables_listbox.remove(row_widget)
+        del self.main_window.items_list[self.url]
 
     def download_item(self, widget):
         """
