@@ -260,20 +260,40 @@ class MainWindow(Gtk.Window):
     #     self.outer_box.add(self.downloadables_listbox)
     #     self.downloadables_listbox.show_all()
 
-    def invalid_url_dialog(self, url, error_msg):
-        """ Error window if clipboard text isn't a valid video address """
-
-        text = ''.join(
-            [_("The address you entered is not downloadable:"),
-             "\n\n",
-             "{}\n\n".format(error_msg),
-             _("Address: “{}”".format(url))])
-
+    def create_error_dialog(self, title, text):
+        """
+        Generic error window to be filled in with window title and main text;
+        returns dialog, a <Gtk.MessageDialog> instance
+        """
         dialog = Gtk.MessageDialog(
             self, 0, Gtk.MessageType.ERROR,
-            Gtk.ButtonsType.CANCEL, _("Invalid address")
+            Gtk.ButtonsType.CANCEL, title
         )
         dialog.format_secondary_text(text)
+
+        return dialog
+
+    def invalid_url_dialog(self, url, error_msg):
+        """ Error window if clipboard text isn't a valid video address """
+        title = _("Invalid address")
+        text = ''.join(
+            [_("The address you entered is not downloadable:"),
+             "\n\n{}\n\n{}".format(error_msg, url)])
+
+        dialog = self.create_error_dialog(title, text)
+        dialog.run()
+        dialog.destroy()
+
+    def duplicate_url_dialog(self, url):
+        """
+        Error window if the pasted address is already present in the list
+        """
+        title = _("Duplicate address")
+        text = ''.join(
+            [_("The address you entered has already been added:"),
+             "\n\n“{}”".format(url)])
+
+        dialog = self.create_error_dialog(title, text)
         dialog.run()
         dialog.destroy()
 
