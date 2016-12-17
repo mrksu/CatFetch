@@ -209,8 +209,9 @@ class MainWindow(Gtk.Window):
         url = ytdl_info_dict["webpage_url"]
 
         if url in self.central_item_dict:
-            # TODO: Change this into a regular error window
-            print("This video is already in the list")
+            v_title = ytdl_info_dict["title"]
+            # self.duplicate_url_dialog(url, v_title)
+            GLib.idle_add(self.duplicate_url_dialog, url, v_title)
             return
 
         formats_list = ytdl_info_dict["formats"]
@@ -284,14 +285,15 @@ class MainWindow(Gtk.Window):
         dialog.run()
         dialog.destroy()
 
-    def duplicate_url_dialog(self, url):
+    def duplicate_url_dialog(self, url, v_title):
         """
         Error window if the pasted address is already present in the list
         """
         title = _("Duplicate address")
         text = ''.join(
             [_("The address you entered has already been added:"),
-             "\n\n“{}”".format(url)])
+             "\n\n{}\n\n".format(url),
+             _("Title: “{}”").format(v_title)])
 
         dialog = self.create_error_dialog(title, text)
         dialog.run()
