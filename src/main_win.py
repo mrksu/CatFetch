@@ -69,8 +69,6 @@ class MainWindow(Gtk.Window):
         self.headerbar.pack_end(self.download_button)
 
         # Button for clearing the videos list
-        # TODO: Decide and implement the actual function
-        # (should this remove only downloaded videos or all?)
         # Possible icons: mail-mark-junk, edit-delete, window-close, user-trash
         self.clear_button = Gtk.Button.new_from_icon_name(
             "user-trash-symbolic", Gtk.IconSize.BUTTON)
