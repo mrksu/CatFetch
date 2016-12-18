@@ -135,8 +135,15 @@ class MainWindow(Gtk.Window):
             thread.daemon = True
             thread.start()
         else:
-            # TODO: Display an error window instead
-            print(_("No text in the clipboard!"))
+            # Clipboard is empty; show an error window
+            title = _("Clipboard empty")
+            text = _(
+                "No text in the clipboard. You need to copy an address first."
+            )
+            dialog = self.create_error_dialog(title, text)
+            GLib.idle_add(dialog.run)
+            GLib.idle_add(dialog.destroy)
+
             self.paste_button.props.sensitive = True
             self.spinner.stop()
 
